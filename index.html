@@ -2,167 +2,129 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GMK COM - V5 Ultimate</title>
+<title>GMK COM - V5 ULTIMATE - by Chef Georges</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.8/dist/umd/supabase.min.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-body{font-family:'Outfit',sans-serif;background:#070a14;color:#e8eaf0;min-height:100vh}
-.glass{background:rgba(255,255,255,0.06);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,0.1);border-radius:24px}
-.gradient-text{background:linear-gradient(90deg,#7c3aed,#ec4899,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
- .btn-primary{background:linear-gradient(90deg,#7c3aed,#ec4899);color:white;padding:14px;border-radius:14px;font-weight:700;width:100%;transition:.2s}
-input{width:100%;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.15);padding:12px 14px;border-radius:12px;color:white;outline:none}
-input:focus{border-color:#7c3aed}
+body{font-family:'Outfit',sans-serif;background:#070A14;color:#E8EAF0;min-height:100vh}
+.glass{background:rgba(255,255,255,0.06);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.1)}
+.gradient-text{background:linear-gradient(90deg,#7C3aed,#ec4899,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-
+color:transparent}
+.btn-primary{background:linear-gradient(90deg,#7C3aed,#ec4899);color:white;padding:14px;border-radius:14px;font-weight:bold;width:100%}
 .tab-active{background:white;color:black!important}
+input{width:100%;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.15);padding:12px 14px;border-radius:12px;color:white}
 </style>
 </head>
 <body class="p-4 flex flex-col items-center">
 <h1 class="text-4xl font-black mt-6 gradient-text">GMK-COM</h1>
-<p class="text-white/50 text-sm mb-6">V5 ULTIMATE • by Chef Georges</p>
+<p class="text-white/50 text-sm mb-6">V5 ULTIMATE - by Chef Georges</p>
 <div id="authSection" class="w-full max-w-md space-y-4">
-<div class="flex gap-2 p-1 bg-white/5 rounded-full">
-<button id="tabLogin" onclick="showTab('login')" class="flex-1 py-2 rounded-full font-bold tab-active">Connexion</button>
-<button id="tabRegister" onclick="showTab('register')" class="flex-1 py-2 rounded-full font-bold text-white/60">Inscription</button>
+  <div class="flex gap-2 p-1 bg-white/5 rounded-full">
+    <button id="tabLogin" onclick="showTab('login')" class="flex-1 py-2 
+rounded-full font-bold tab-active">Connexion</button>
+    <button id="tabRegister" onclick="showTab('register')" class="flex-1 py-2 rounded-full font-bold text-white/60">Inscription</button>
+  </div>
+  <div id="loginBox" class="glass p-6 space-y-4 rounded-2xl">
+    <input id="loginEmail" type="email" placeholder="Ton email">
+    <input id="loginPass" type="password" placeholder="Mot de passe">
+    <button onclick="doLogin()" class="btn-primary">SE CONNECTER</button>
+  </div>
+  <div id="registerBox" class="glass p-6 space-y-4 rounded-2xl hidden">
+    <input id="regEmail" type="email" placeholder="Email du membre">
+    <input id="regPass" type="password" placeholder="Mot de passe">
+<button onclick="doRegister()" class="btn-primary">CRÉER LE COMPTE</button>
+  </div>
 </div>
-<div id="loginBox" class="glass p-6 space-y-4">
-<div id="loginAvatarPreview" class="w-24 h-24 mx-auto rounded-full bg-white/10 flex items-center justify-center text-3xl overflow-hidden">👤</div>
-<input id="loginEmail" type="email" placeholder="Email">
-<input id="loginPass" type="password" placeholder="Mot de passe">
-<label class="flex items-center gap-2 text-sm text-white/60"><input id="savePass" type="checkbox" style="width:auto"> Sauver mot de passe</label>
-<button onclick="doLogin()" class="btn-primary">Se connecter avec photo</button>
+<div id="dashboardAdmin" class="w-full max-w-4xl hidden">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-black">🚀 CABINE DE PILOTAGE - CHEF GEORGES</h2>
+    <button onclick="doLogout()" class="bg-white/10 px-4 py-2 rounded-full">Déconnexion</button>
+  </div>
+  <div class="grid grid-cols-2 gap-4 mb-6">
+    <div class="glass p-6 rounded-2xl"><p class="text-white/50">Chiffre Total</p><h3 class="text-3xl font-black">3500 FCFA</h3></div>
+    <div class="glass p-6 rounded-2xl"><p class="text-white/50">Membres</p><h3 id="memberCount" class="text-3xl font-black">...</h3></div>
+  </div>
+  <h3 class="font-bold mb-4">Gestion</h3>
+    <button onclick="showCommunityFromAdmin()" class="btn-primary mb-3">👁️ VOIR LA PAGE COMMUNAUTÉ COMME LES MEMBRES</button>
+    <p class="text-white/40 text-sm">Ici tu vois tout. Les membres ne verront jamais cette page.</p>
+    <div id="allUsersList" class="mt-4 space-y-2"></div>
+  </div>
 </div>
- <div id="registerBox" class="glass p-6 space-y-3 hidden">
-<div onclick="document.getElementById('regAvatar').click()" id="regAvatarPreview" class="w-24 h-24 mx-auto rounded-full bg-white/10 flex items-center justify-center text-sm cursor-pointer overflow-hidden border-2 border-dashed border-white/20">+ Photo</div>
-<input id="regAvatar" type="file" accept="image/*" class="hidden" onchange="previewAvatar(this)">
-<input id="regNom" placeholder="Nom complet">
-<input id="regPseudo" placeholder="Pseudo">
-<input id="regEmail" type="email" placeholder="Email">
-<input id="regTel" placeholder="Téléphone WhatsApp">
-<input id="regPass" type="password" placeholder="Mot de passe">
-<button onclick="doRegister()" class="btn-primary">Créer mon compte</button>
+<div id="espaceMembre" class="w-full max-w-2xl hidden">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-black">💬 Communauté GMK-COM</h2>
+    <button onclick="doLogout()" class="bg-white/10 px-4 py-2 rounded-full">Déconnexion</button>
+  </div>
+  <div class="glass p-6 rounded-2xl mb-4">
+    <p class="mb-2">Bienvenue <span id="membreEmail" class="font-bold text-purple-400"></span> !</p>div class="glass p-6 rounded-2xl">
+<p class="text-white/60 text-sm">Ici tout le monde se voit et interagit. C'est l'espace des abonnés.</p>
+  </div>
+  <div class="glass p-6 rounded-2xl">
+    <h3 class="font-bold mb-3">Fil d'actualité (Tout le monde se voit ici)</h3>
+    <div id="feed" class="space-y-3 text-white/70 text-sm">Bientôt: posts, likes, commentaires...</div>
+  </div>
 </div>
-</div>
-<div id="dashSection" class="hidden w-full max-w-4xl space-y-4">
-<div class="glass p-5 flex items-center justify-between">
-<div class="flex items-center gap-3">
-<div id="dashAvatar" class="w-12 h-12 rounded-full bg-white/10 overflow-hidden flex items-center justify-center">👤</div>
-<div><div id="dashName" class="font-bold"></div><div id="dashEmail" class="text-xs text-white/50"></div></div>
-</div>
-<button onclick="doLogout()" class="text-xs bg-white/10 px-3 py-2 rounded-full">Déconnexion</button>
-</div>
-<div class="flex gap-2 overflow-x-auto">
-<button onclick="setPeriod('jour')" id="p-jour" class="px-5 py-2 rounded-full bg-white text-black font-bold">Jour</button>
-<button onclick="setPeriod('semaine')" id="p-semaine" class="px-5 py-2 rounded-full bg-white/10">Semaine</button>
-<button onclick="setPeriod('mois')" id="p-mois" class="px-5 py-2 rounded-full bg-white/10">Mois</button>
-<button onclick="setPeriod('annee')" id="p-annee" class="px-5 py-2 rounded-full bg-white/10">Année</button>
-</div>
-<div class="grid grid-cols-2 gap-3">
-<div class="glass p-4"><div class="text-white/50 text-xs">Chiffre du <span class="periodLabel">jour</span></div><div id="statCA" class="text-2xl font-black">0 FCFA</div></div>
-<div class="glass p-4"><div class="text-white/50 text-xs">Commandes</div><div id="statOrders" class="text-2xl font-black">0</div></div>
-<div class="glass p-4"><div class="text-white/50 text-xs">Membres</div><div id="statMembers" class="text-2xl font-black">1</div></div>
-<div class="glass p-4"><div class="text-white/50 text-xs">Croissance</div><div class="text-2xl font-black text-green-400">+12%</div></div>
-</div>
-<div class="glass p-5">
-<h3 class="font-bold mb-3">Membres - <span class="periodLabel">jour</span></h3>
-<div id="membersList" class="space-y-2 text-sm"></div>
-</div>
-</div>
-<script>
-const SUPABASE_URL='https://humvsmyveyyezirlpvhy.supabase.co';
-const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh1bXZzbXl2ZXl5ZXppcmxwdmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyNjgyMTcsImV4cCI6MjEwMzg0NDIxN30.9W0gfiN1JO1aj_tJcq1zy2QNEBHGpFKWx3VmMrwsExc';
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-let currentAvatarBase64=null;let period='jour';
+ <script>
+const ADMIN_EMAIL = "georgeskasso3@gmail.com"; 
+const SUPABASE_URL = "https://mhlxvsmr6er9ezirlpvhy.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJIziI6Im1h1bXZzbXI2ZXI5ZXppcmxwdmh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyNjgyMTcsImV4cCI6MjEwMzg0NDIxN30.9W0gfiN1JO1aj_tJcq1zy2QNEBHGpFKWx3VmMrwsExc";
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 function showTab(t){
- document.getElementById('loginBox').classList.toggle('hidden',t!=='login');
-document.getElementById('registerBox').classList.toggle('hidden',t!=='register');
- document.getElementById('tabLogin').classList.toggle('tab-active',t==='login');
- document.getElementById('tabRegister').classList.toggle('tab-active',t==='register');
-}
-function previewAvatar(input){
- const file=input.files[0];if(!file)return;
- const r=new FileReader();r.onload=e=>{
-   currentAvatarBase64=e.target.result;
-   document.getElementById('regAvatarPreview').innerHTML=`<img src="${currentAvatarBase64}" class="w-full h-full object-cover">`;
- };r.readAsDataURL(file);
-}
-async function doRegister(){
- const nom=document.getElementById('regNom').value.trim();
- const pseudo=document.getElementById('regPseudo').value.trim();
- const email=document.getElementById('regEmail').value.trim();
- const tel=document.getElementById('regTel').value.trim();
- const pass=document.getElementById('regPass').value;
- if(!email||!pass||!nom){alert('Remplis Nom, Email et Mot de passe');return;}
- const btn=event.target;btn.textContent='Création...';btn.disabled=true;
- try{
-  const {data,error}=await supabaseClient.auth.signUp({email,password:pass});
-  if(error)throw error;
-  if(data.user){
-   await 
-supabaseClient.from('profiles').insert({id:data.user.id,nom,pseudo,email,telephone:tel,avatar_url:currentAvatarBase64||null});
-  }
-  alert('Compte créé! Connecte-toi maintenant Chef!');
-  showTab('login');document.getElementById('loginEmail').value=email;
- }catch(e){alert('Erreur: '+e.message)}finally{btn.textContent='Créer mon compte';btn.disabled=false;}
+  document.getElementById('loginBox').classList.toggle('hidden', t!=='login');
+  document.getElementById('registerBox').classList.toggle('hidden', t!=='register');
+  document.getElementById('tabLogin').classList.toggle('tab-active', t==='login');
+  document.getElementById('tabRegister').classList.toggle('tab-active', t==='register');
 }
 async function doLogin(){
- const email=document.getElementById('loginEmail').value.trim();
- const pass=document.getElementById('loginPass').value;
- const save=document.getElementById('savePass').checked;
- if(!email||!pass){alert('Email et mot de passe');return;}
- const 
-btn=event.target;btn.textContent='Connexion...';
- try{
-  const {data,error}=await supabaseClient.auth.signInWithPassword({email,password:pass});
-  if(error)throw error;
-  if(save){localStorage.setItem('gmk_email',email);localStorage.setItem('gmk_pass',pass);}
-  else{localStorage.removeItem('gmk_pass');localStorage.setItem('gmk_email',email);}
-  loadProfile(data.user);
- }catch(e){alert('Erreur: '+e.message)}finally{btn.textContent='Se connecter avec photo';}
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPass').value;
+  const { data, error } = await supabase.auth.signInWithPassword({email, password});
+  if(error) return alert(error.message);
+  checkUser(data.user);
 }
-async function loadProfile(user){
- const {data:profile}=await supabaseClient.from('profiles').select('*').eq('id',user.id).single();
- document.getElementById('authSection').classList.add('hidden');
-document.getElementById('dashSection').classList.remove('hidden');
- document.getElementById('dashName').textContent=profile?.nom||user.email;
- document.getElementById('dashEmail').textContent=profile?.email||user.email;
- const av=profile?.avatar_url;
- if(av){
-   document.getElementById('dashAvatar').innerHTML=`<img src="${av}" class="w-full h-full object-cover">`;
-   document.getElementById('loginAvatarPreview').innerHTML=`<img src="${av}" class="w-full h-full object-cover">`;
- }
- loadStats();
+
+async function doRegister(){
+  const email = document.getElementById('regEmail').value;
+  const password = document.getElementById('regPass').value;
+  const { data, error } = await supabase.auth.signUp({email, password});
+  if(error) return alert(error.message);
+  alert("Compte créé! Connecte-toi maintenant.");
+  showTab('login');
 }
-async function loadStats(){
- const {data,count}=await supabaseClient.from('profiles').select('*',{count:'exact'});
- document.getElementById('statMembers').textContent=count||1;
- document.getElementById('statOrders').textContent=Math.floor((count||1)*1.7);
- document.getElementById('statCA').textContent=((count||1)*2500)+' FCFA';
- const list=document.getElementById('membersList');
- if(data){
-  list.innerHTML=data.map(m=>`<div class="flex items-center gap-2 bg-white/5 p-2 rounded-xl"><div class="w-8 h-8 rounded-full bg-white/10 overflow-hidden flex items-center justify-center">${m.avatar_url?`<img src="${m.avatar_url}" class="w-full h-full object-cover">`:'👤'}</div><div><div class="font-bold">${m.nom||'Sans nom'} - ${m.pseudo||''}</div><div class="text-xs text-white/50">${m.email||''} • ${m.telephone||''}</div></div></div>`).join('');
- }
+function checkUser(user){
+  document.getElementById('authSection').classList.add('hidden');
+  if(user.email === ADMIN_EMAIL){
+    // C'EST LE CHEF
+    document.getElementById('dashboardAdmin').classList.remove('hidden');
+    loadAdminData();
+  } else {
+    // C'EST UN MEMBRE
+    document.getElementById('espaceMembre').classList.remove('hidden');
+    document.getElementById('membreEmail').innerText = user.email;
+  }
 }
-function setPeriod(p){
- period=p;
- document.querySelectorAll('[id^="p-"]').forEach(b=>{b.className='px-5 py-2 rounded-full bg-white/10';});
- document.getElementById('p-'+p).className='px-5 py-2 rounded-full bg-white text-black font-bold';
- document.querySelectorAll('.periodLabel').forEach(e=>e.textContent=p);
- if(p==='jour'){document.getElementById('statCA').textContent='2 500 FCFA';}
- if(p==='semaine'){document.getElementById('statCA').textContent='18 500 FCFA';}
- if(p==='mois'){document.getElementById('statCA').textContent='75 000 FCFA';}
- if(p==='annee'){document.getElementById('statCA').textContent='850 000 FCFA';}
+function showCommunityFromAdmin(){
+  document.getElementById('dashboardAdmin').classList.add('hidden');
+document.getElementById('espaceMembre').classList.remove('hidden');
+  document.getElementById('membreEmail').innerText = ADMIN_EMAIL + " (vue Admin)";
 }
- async function doLogout(){await supabaseClient.auth.signOut();location.reload();}
-window.onload=async()=>{
- const savedEmail=localStorage.getItem('gmk_email');
- const savedPass=localStorage.getItem('gmk_pass');
- if(savedEmail){document.getElementById('loginEmail').value=savedEmail;}
- if(savedPass){document.getElementById('loginPass').value=savedPass;document.getElementById('savePass').checked=true;}
- const {data}=await supabaseClient.auth.getSession();
- if(data.session){loadProfile(data.session.user);}
+
+async function loadAdminData(){
+  // Exemple pour compter les membres
+  document.getElementById('memberCount').innerText = "En cours...";
 }
+
+async function doLogout(){
+  await supabase.auth.signOut();
+  location.reload();
+}
+
+// Vérifie si déjà connecté au chargement
+supabase.auth.getUser().then(({data})=>{ if(data.user) checkUser(data.user); });
 </script>
 </body>
 </html>
-
  
+   
