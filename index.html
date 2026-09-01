@@ -2,62 +2,167 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GMK-COM V4 - Super Big Host</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>GMK COM - V5 Ultimate</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.8/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#f0f2f5;margin:0}
-.header{background:#1877f2;color:#fff;padding:12px 15px;position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center}
-.card{background:#fff;padding:15px;border-radius:12px;margin:12px auto;max-width:640px;box-shadow:0 1px 2px rgba(0,0,0,.15)}
-textarea,input{width:100%;padding:12px;border-radius:8px;border:1px solid #ddd;margin:6px 0;font-size:16px}
-button{border:none;padding:9px 14px;border-radius:8px;font-weight:bold;cursor:pointer;margin:3px;color:#fff}
-.btn-post{background:#1877f2;width:100%;font-size:16px;padding:12px}
-.yt{aspect-ratio:16/9;width:100%;border:none;border-radius:10px;margin-top:8px;background:#000}
-.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-.actions button{background:#e4e6eb;color:#050505}
-.com{font-size:14px;background:#f0f2f5;padding:8px 12px;border-radius:16px;margin:6px 0}
-.badge{background:#42b72a;color:#fff;padding:3px 8px;border-radius:10px;font-size:11px}
+body{font-family:'Outfit',sans-serif;background:#070a14;color:#e8eaf0;min-height:100vh}
+.glass{background:rgba(255,255,255,0.06);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,0.1);border-radius:24px}
+.gradient-text{background:linear-gradient(90deg,#7c3aed,#ec4899,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+ .btn-primary{background:linear-gradient(90deg,#7c3aed,#ec4899);color:white;padding:14px;border-radius:14px;font-weight:700;width:100%;transition:.2s}
+input{width:100%;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.15);padding:12px 14px;border-radius:12px;color:white;outline:none}
+input:focus{border-color:#7c3aed}
+.tab-active{background:white;color:black!important}
 </style>
 </head>
-<body>
-<div class="header"><h1>🕊️ GMK-COM</h1><span class="badge">V4 • SUPER BIG HOST</span></div>
-<div class="card">
-<textarea id="texte" rows="3" placeholder="Quoi de neuf? Colle ton texte et ton lien YouTube ici..."></textarea>
-<input id="ytlink" placeholder="Lien YouTube optionnel: https://youtu.be/...">
-<input type="file" id="file" accept="image/*,video/*">
-<div style="font-size:12px;color:#666">Image, vidéo, ou lien YouTube - illimité!</div>
-<button class="btn-post" onclick="poster()" id="btnPost">📤 PUBLIER SUR GMK-COM</button>
-<div id="status" style="text-align:center;margin-top:8px;font-weight:bold"></div>
+<body class="p-4 flex flex-col items-center">
+<h1 class="text-4xl font-black mt-6 gradient-text">GMK-COM</h1>
+<p class="text-white/50 text-sm mb-6">V5 ULTIMATE • by Chef Georges</p>
+<div id="authSection" class="w-full max-w-md space-y-4">
+<div class="flex gap-2 p-1 bg-white/5 rounded-full">
+<button id="tabLogin" onclick="showTab('login')" class="flex-1 py-2 rounded-full font-bold tab-active">Connexion</button>
+<button id="tabRegister" onclick="showTab('register')" class="flex-1 py-2 rounded-full font-bold text-white/60">Inscription</button>
 </div>
-<div id="feed"></div>
+<div id="loginBox" class="glass p-6 space-y-4">
+<div id="loginAvatarPreview" class="w-24 h-24 mx-auto rounded-full bg-white/10 flex items-center justify-center text-3xl overflow-hidden">👤</div>
+<input id="loginEmail" type="email" placeholder="Email">
+<input id="loginPass" type="password" placeholder="Mot de passe">
+<label class="flex items-center gap-2 text-sm text-white/60"><input id="savePass" type="checkbox" style="width:auto"> Sauver mot de passe</label>
+<button onclick="doLogin()" class="btn-primary">Se connecter avec photo</button>
+</div>
+ <div id="registerBox" class="glass p-6 space-y-3 hidden">
+<div onclick="document.getElementById('regAvatar').click()" id="regAvatarPreview" class="w-24 h-24 mx-auto rounded-full bg-white/10 flex items-center justify-center text-sm cursor-pointer overflow-hidden border-2 border-dashed border-white/20">+ Photo</div>
+<input id="regAvatar" type="file" accept="image/*" class="hidden" onchange="previewAvatar(this)">
+<input id="regNom" placeholder="Nom complet">
+<input id="regPseudo" placeholder="Pseudo">
+<input id="regEmail" type="email" placeholder="Email">
+<input id="regTel" placeholder="Téléphone WhatsApp">
+<input id="regPass" type="password" placeholder="Mot de passe">
+<button onclick="doRegister()" class="btn-primary">Créer mon compte</button>
+</div>
+</div>
+<div id="dashSection" class="hidden w-full max-w-4xl space-y-4">
+<div class="glass p-5 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div id="dashAvatar" class="w-12 h-12 rounded-full bg-white/10 overflow-hidden flex items-center justify-center">👤</div>
+<div><div id="dashName" class="font-bold"></div><div id="dashEmail" class="text-xs text-white/50"></div></div>
+</div>
+<button onclick="doLogout()" class="text-xs bg-white/10 px-3 py-2 rounded-full">Déconnexion</button>
+</div>
+<div class="flex gap-2 overflow-x-auto">
+<button onclick="setPeriod('jour')" id="p-jour" class="px-5 py-2 rounded-full bg-white text-black font-bold">Jour</button>
+<button onclick="setPeriod('semaine')" id="p-semaine" class="px-5 py-2 rounded-full bg-white/10">Semaine</button>
+<button onclick="setPeriod('mois')" id="p-mois" class="px-5 py-2 rounded-full bg-white/10">Mois</button>
+<button onclick="setPeriod('annee')" id="p-annee" class="px-5 py-2 rounded-full bg-white/10">Année</button>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div class="glass p-4"><div class="text-white/50 text-xs">Chiffre du <span class="periodLabel">jour</span></div><div id="statCA" class="text-2xl font-black">0 FCFA</div></div>
+<div class="glass p-4"><div class="text-white/50 text-xs">Commandes</div><div id="statOrders" class="text-2xl font-black">0</div></div>
+<div class="glass p-4"><div class="text-white/50 text-xs">Membres</div><div id="statMembers" class="text-2xl font-black">1</div></div>
+<div class="glass p-4"><div class="text-white/50 text-xs">Croissance</div><div class="text-2xl font-black text-green-400">+12%</div></div>
+</div>
+<div class="glass p-5">
+<h3 class="font-bold mb-3">Membres - <span class="periodLabel">jour</span></h3>
+<div id="membersList" class="space-y-2 text-sm"></div>
+</div>
+</div>
 <script>
-const SUPABASE_URL = "https://humvsmyveyyezirlpvhy.supabase.co";
-const SUPABASE_KEY = "sb_publishable_wPcY1F68QBH4uxyI-nM7Hw_eDifFrEQ";
-const supa = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-function ytId(url){ if(!url) return null; let m=url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([^&\s?]+)/); return m?m[1]:null; }
-async function poster(){
+const SUPABASE_URL='https://humvsmyveyyezirlpvhy.supabase.co';
+const SUPABASE_KEY='sb_publishable_G9aSgi3QaU3oU8RwJ5la0w_kYp2cm1P';
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let currentAvatarBase64=null;let period='jour';
+function showTab(t){
+ document.getElementById('loginBox').classList.toggle('hidden',t!=='login');
+document.getElementById('registerBox').classList.toggle('hidden',t!=='register');
+ document.getElementById('tabLogin').classList.toggle('tab-active',t==='login');
+ document.getElementById('tabRegister').classList.toggle('tab-active',t==='register');
+}
+function previewAvatar(input){
+ const file=input.files[0];if(!file)return;
+ const r=new FileReader();r.onload=e=>{
+   currentAvatarBase64=e.target.result;
+   document.getElementById('regAvatarPreview').innerHTML=`<img src="${currentAvatarBase64}" class="w-full h-full object-cover">`;
+ };r.readAsDataURL(file);
+}
+async function doRegister(){
+ const nom=document.getElementById('regNom').value.trim();
+ const pseudo=document.getElementById('regPseudo').value.trim();
+ const email=document.getElementById('regEmail').value.trim();
+ const tel=document.getElementById('regTel').value.trim();
+ const pass=document.getElementById('regPass').value;
+ if(!email||!pass||!nom){alert('Remplis Nom, Email et Mot de passe');return;}
+ const btn=event.target;btn.textContent='Création...';btn.disabled=true;
+ try{
+  const {data,error}=await supabaseClient.auth.signUp({email,password:pass});
+  if(error)throw error;
+  if(data.user){
+   await 
+supabaseClient.from('profiles').insert({id:data.user.id,nom,pseudo,email,telephone:tel,avatar_url:currentAvatarBase64||null});
+  }
+  alert('Compte créé! Connecte-toi maintenant Chef!');
+  showTab('login');document.getElementById('loginEmail').value=email;
+ }catch(e){alert('Erreur: '+e.message)}finally{btn.textContent='Créer mon compte';btn.disabled=false;}
+}
+async function doLogin(){
+ const email=document.getElementById('loginEmail').value.trim();
+ const pass=document.getElementById('loginPass').value;
+ const save=document.getElementById('savePass').checked;
+ if(!email||!pass){alert('Email et mot de passe');return;}
  const 
-t=document.getElementById('texte').value.trim(); const ytRaw=document.getElementById('ytlink').value.trim()||t; const file=document.getElementById('file').files[0];
- const btn=document.getElementById('btnPost'); const status=document.getElementById('status');
- if(!t &&!file &&!ytRaw){ alert("Écris quelque chose!"); return;} btn.disabled=true; btn.innerText="Envoi..."; status.innerText="⏳ Upload...";
- try{ let image_url=null, video_url=null, youtube_url=null; let yid=ytId(ytRaw); if(yid) youtube_url="https://www.youtube.com/watch?v="+yid;
- if(file){ let name=Date.now()+"_"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_"); let {error}=await supa.storage.from('gmk-media').upload(name,file); if(error) throw error; let {data}=supa.storage.from('gmk-media').getPublicUrl(name); if(file.type.startsWith('video')) video_url=data.publicUrl; else image_url=data.publicUrl; }
- let {error}=await 
- supa.from('posts').insert({texte:t, image_url, video_url, youtube_url}); if(error) throw error;
- status.innerText="✅ Publié!"; status.style.color="green"; document.getElementById('texte').value=""; document.getElementById('ytlink').value=""; document.getElementById('file').value=""; setTimeout(()=>status.innerText="",3000); load();
- }catch(e){ status.innerText="❌ "+e.message; status.style.color="red";} btn.disabled=false; btn.innerText="📤 PUBLIER SUR GMK-COM";
+btn=event.target;btn.textContent='Connexion...';
+ try{
+  const {data,error}=await supabaseClient.auth.signInWithPassword({email,password:pass});
+  if(error)throw error;
+  if(save){localStorage.setItem('gmk_email',email);localStorage.setItem('gmk_pass',pass);}
+  else{localStorage.removeItem('gmk_pass');localStorage.setItem('gmk_email',email);}
+  loadProfile(data.user);
+ }catch(e){alert('Erreur: '+e.message)}finally{btn.textContent='Se connecter avec photo';}
 }
-async function react(id,field){ try{ let {data}=await supa.from('posts').select('likes,dislikes').eq('id',id).single(); let upd={}; upd[field]=(data[field]||0)+1; await supa.from('posts').update(upd).eq('id',id); load(); }catch(e){alert(e.message)} }
-async function commenter(pid){ let txt=prompt("Ton commentaire:"); if(!txt) return; await supa.from('commentaires').insert({post_id:pid, texte:txt}); load(); }
-async function load(){
-let {data:posts,error}=await supa.from('posts').select('*').order('created_at',{ascending:false}); if(error){document.getElementById('feed').innerHTML="<div class=card>❌ "+error.message+"</div>";return;}
- let html=""; for(let p of posts){ let yid=ytId(p.youtube_url); let shareTxt=encodeURIComponent((p.texte||"Regarde sur GMK-COM")+" "+(p.youtube_url||""));
- html+=`<div class="card"><div style="font-weight:bold">🕊️ GMK-COM <span style="color:#65676b;font-size:12px">• ${new Date(p.created_at).toLocaleString('fr-FR')}</span></div><div style="white-space:pre-wrap">${(p.texte||"").replace(/</g,"&lt;")}</div>${p.image_url?`<img src="${p.image_url}" style="width:100%;border-radius:10px;margin-top:8px">`:""}${p.video_url?`<video src="${p.video_url}" controls style="width:100%;border-radius:10px;margin-top:8px"></video>`:""}${yid?`<iframe class="yt" src="https://www.youtube.com/embed/${yid}" allowfullscreen></iframe>`:""}<div class="actions"><button onclick="react(${p.id},'likes')">❤️ ${p.likes||0}</button><button onclick="react($ 
-{p.id},'dislikes')">👎 ${p.dislikes||0}</button><button onclick="commenter(${p.id})">💬 Commenter</button><a href="https://wa.me/?text=${shareTxt}" target="_blank"><button style="background:#25D366">📱 WhatsApp</button></a><a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(p.youtube_url||p.image_url||'')}" target="_blank"><button style="background:#1877f2">📘 Facebook</button></a></div><div id="com-${p.id}"></div></div>`; }
- document.getElementById('feed').innerHTML=html||"<div class=card style=text-align:center>Aucun post. Sois le premier! 🚀</div>";
- for(let p of posts){ let {data:coms}=await supa.from('commentaires').select('*').eq('post_id',p.id).order('created_at'); if(coms&&coms.length){document.getElementById(`com-${p.id}`).innerHTML=coms.map(c=>`<div class="com">💬 ${c.texte.replace(/</g,"&lt;")}</div>`).join("");}}
+async function loadProfile(user){
+ const {data:profile}=await supabaseClient.from('profiles').select('*').eq('id',user.id).single();
+ document.getElementById('authSection').classList.add('hidden');
+document.getElementById('dashSection').classList.remove('hidden');
+ document.getElementById('dashName').textContent=profile?.nom||user.email;
+ document.getElementById('dashEmail').textContent=profile?.email||user.email;
+ const av=profile?.avatar_url;
+ if(av){
+   document.getElementById('dashAvatar').innerHTML=`<img src="${av}" class="w-full h-full object-cover">`;
+   document.getElementById('loginAvatarPreview').innerHTML=`<img src="${av}" class="w-full h-full object-cover">`;
+ }
+ loadStats();
 }
-load();
-</script></body></html>
- 
+async function loadStats(){
+ const {data,count}=await supabaseClient.from('profiles').select('*',{count:'exact'});
+ document.getElementById('statMembers').textContent=count||1;
+ document.getElementById('statOrders').textContent=Math.floor((count||1)*1.7);
+ document.getElementById('statCA').textContent=((count||1)*2500)+' FCFA';
+ const list=document.getElementById('membersList');
+ if(data){
+  list.innerHTML=data.map(m=>`<div class="flex items-center gap-2 bg-white/5 p-2 rounded-xl"><div class="w-8 h-8 rounded-full bg-white/10 overflow-hidden flex items-center justify-center">${m.avatar_url?`<img src="${m.avatar_url}" class="w-full h-full object-cover">`:'👤'}</div><div><div class="font-bold">${m.nom||'Sans nom'} - ${m.pseudo||''}</div><div class="text-xs text-white/50">${m.email||''} • ${m.telephone||''}</div></div></div>`).join('');
+ }
+}
+function setPeriod(p){
+ period=p;
+ document.querySelectorAll('[id^="p-"]').forEach(b=>{b.className='px-5 py-2 rounded-full bg-white/10';});
+ document.getElementById('p-'+p).className='px-5 py-2 rounded-full bg-white text-black font-bold';
+ document.querySelectorAll('.periodLabel').forEach(e=>e.textContent=p);
+ if(p==='jour'){document.getElementById('statCA').textContent='2 500 FCFA';}
+ if(p==='semaine'){document.getElementById('statCA').textContent='18 500 FCFA';}
+ if(p==='mois'){document.getElementById('statCA').textContent='75 000 FCFA';}
+ if(p==='annee'){document.getElementById('statCA').textContent='850 000 FCFA';}
+}
+ async function doLogout(){await supabaseClient.auth.signOut();location.reload();}
+window.onload=async()=>{
+ const savedEmail=localStorage.getItem('gmk_email');
+ const savedPass=localStorage.getItem('gmk_pass');
+ if(savedEmail){document.getElementById('loginEmail').value=savedEmail;}
+ if(savedPass){document.getElementById('loginPass').value=savedPass;document.getElementById('savePass').checked=true;}
+ const {data}=await supabaseClient.auth.getSession();
+ if(data.session){loadProfile(data.session.user);}
+}
+</script>
+</body>
+</html>
+
  
