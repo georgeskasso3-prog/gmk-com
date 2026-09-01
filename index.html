@@ -1,95 +1,63 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GMK-COM V3</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GMK-COM V4 - Super Big Host</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-body{font-family:Arial;max-width:500px;margin:auto;padding:10px;padding-bottom:70px}
-.bande{border:2px dashed #007bff;color:#007bff;text-align:center;padding:8px;font-weight:bold;margin:10px 0}
-.card{background:#f5f5f5;padding:12px;margin:10px 0;border-radius:10px}
-.card img,.card video{width:100%;border-radius:8px;margin-top:8px}
-button{width:100%;background:#0055ff;color:white;padding:12px;border:none;border-radius:6px;font-weight:bold;cursor:pointer;margin-top:5px}
-.btn2{background:#eee;color:#333;padding:8px;width:48%;display:inline-block}
- input,textarea{width:95%;padding:10px;margin:5px 0;border:1px solid #ccc;border-radius:6px}
-.menu{display:flex;position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #ccc;z-index:10}
-.menu div{flex:1;text-align:center;padding:14px;cursor:pointer}
-.active{background:#0055ff;color:white}
-.onglet{display:inline-block;padding:6px 10px;background:#eee;border-radius:15px;margin:2px;font-size:12px;cursor:pointer}
-.onglet.active-onglet{background:#0055ff;color:white}
-#preview img,#preview video{width:100%;border-radius:8px;margin-top:5px}
+*{box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#f0f2f5;margin:0}
+.header{background:#1877f2;color:#fff;padding:12px 15px;position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center}
+.card{background:#fff;padding:15px;border-radius:12px;margin:12px auto;max-width:640px;box-shadow:0 1px 2px rgba(0,0,0,.15)}
+textarea,input{width:100%;padding:12px;border-radius:8px;border:1px solid #ddd;margin:6px 0;font-size:16px}
+button{border:none;padding:9px 14px;border-radius:8px;font-weight:bold;cursor:pointer;margin:3px;color:#fff}
+.btn-post{background:#1877f2;width:100%;font-size:16px;padding:12px}
+.yt{aspect-ratio:16/9;width:100%;border:none;border-radius:10px;margin-top:8px;background:#000}
+.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.actions button{background:#e4e6eb;color:#050505}
+.com{font-size:14px;background:#f0f2f5;padding:8px 12px;border-radius:16px;margin:6px 0}
+.badge{background:#42b72a;color:#fff;padding:3px 8px;border-radius:10px;font-size:11px}
 </style>
 </head>
 <body>
-<center>
-<div style="font-size:40px">🕊️</div>
-<h2>GMK-COM</h2>
-<p><b>BIENVENUE dans la Communauté GMK-COM!</b><br>La Vision Nouvelle de la communication.</p>
-<div class="bande">AVEC GMK-COM, ENSEMBLE NOUS IRONS PLUS LOIN!</div>
-</center>
-
-<div id="pageFil">
-<div id="listePosts"></div>
-<textarea id="txtPost" rows="2" placeholder="Bonjour à toutes et à tous!"></textarea>
-<div id="preview"></div>
-<div style="display:flex;justify-content:space-between">
-<label class="btn2" style="text-align:center;border-radius:6px;cursor:pointer">📷 Photo<input type="file" id="fPhoto" accept="image/*" hidden onchange="previewFile(this,'img')"></label>
-<label class="btn2" style="text-align:center;border-radius:6px;cursor:pointer">🎥 Vidéo<input type="file" id="fVideo" accept="video/*" hidden onchange="previewFile(this,'vid')"></label>
+<div class="header"><h1>🕊️ GMK-COM</h1><span class="badge">V4 • SUPER BIG HOST</span></div>
+<div class="card">
+<textarea id="texte" rows="3" placeholder="Quoi de neuf? Colle ton texte et ton lien YouTube ici..."></textarea>
+<input id="ytlink" placeholder="Lien YouTube optionnel: https://youtu.be/...">
+<input type="file" id="file" accept="image/*,video/*">
+<div style="font-size:12px;color:#666">Image, vidéo, ou lien YouTube - illimité!</div>
+<button class="btn-post" onclick="poster()" id="btnPost">📤 PUBLIER SUR GMK-COM</button>
+<div id="status" style="text-align:center;margin-top:8px;font-weight:bold"></div>
 </div>
-<button onclick="publier()">Publier</button>
-</div>
-
-<div id="pageNGOs" style="display:none"><h3>NGOs CONNECT</h3><div id="onglets"></div><div id="listeNGOs"></div></div>
-<div id="pageCoach" style="display:none"><h3>GMK-COACH 🕊️</h3><div class="card" id="coachText">Ton coeur est courageux Chef!</div><input id="q" placeholder="Pose ta question..."><button onclick="coach()">Demander</button></div>
-<div id="pageChats" style="display:none"><h3>Chats & Appels</h3><div class="card">💬 Bientôt vocaux & appels groupés</div></div>
-
-<div class="menu">
-<div id="mFil" class="active" onclick="show('Fil')">Fil</div>
-<div id="mChats" onclick="show('Chats')">Chats</div>
-<div id="mNGOs" onclick="show('NGOs')">NGOs</div>
-<div id="mCoach" onclick="show('Coach')">Coach</
-div>
-</div>
-
+<div id="feed"></div>
 <script>
-const NGOs={"HUMANITAIRE":[{n:"UNHCR",u:"https://www.unhcr.org"},{n:"IRC",u:"https://www.rescue.org"}],"SANTE":[{n:"MSF",u:"https://www.msf.org"}],"ENFANCE":[{n:"UNICEF",u:"https://www.unicef.org"}],"DEVELOPPEMENT":[{n:"CARE",u:"https://www.care.org"}],"DROITS":[{n:"Amnesty",u:"https://www.amnesty.org"}]};
-let cat="HUMANITAIRE", mediaData=null, mediaType=null;
-let posts=JSON.parse(localStorage.getItem('gmk_v3')||'[]');
-if(posts.length==0) posts=["Aminata K.: 200 arbres plantés 🌱 ❤️24"];
-
-function afficherPosts(){
- let h='';
- posts.forEach(p=>{
- if(p.includes('data:image')) h+=`<div class="card"><b>Vous:</b><br>${p.split('|||')[0]}<br><img src="${p.split('|||')[1]}"></div>`;
-  else if(p.includes('data:video')) h+=`<div class="card"><b>Vous:</b><br>${p.split('|||')[0]}<br><video controls src="${p.split('|||')[1]}"></video></div>`;
-  else h+=`<div class="card"><b>${p}</b></div>`;
- });
- document.getElementById('listePosts').innerHTML=h;
+const SUPABASE_URL = "https://humvsmyveyyezirlpvhy.supabase.co";
+const SUPABASE_KEY = "sb_publishable_wPcY1F68QBH4uxyI-nM7Hw_eDifFrEQ";
+const supa = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+function ytId(url){ if(!url) return null; let m=url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([^&\s?]+)/); return m?m[1]:null; }
+async function poster(){
+ const 
+t=document.getElementById('texte').value.trim(); const ytRaw=document.getElementById('ytlink').value.trim()||t; const file=document.getElementById('file').files[0];
+ const btn=document.getElementById('btnPost'); const status=document.getElementById('status');
+ if(!t &&!file &&!ytRaw){ alert("Écris quelque chose!"); return;} btn.disabled=true; btn.innerText="Envoi..."; status.innerText="⏳ Upload...";
+ try{ let image_url=null, video_url=null, youtube_url=null; let yid=ytId(ytRaw); if(yid) youtube_url="https://www.youtube.com/watch?v="+yid;
+ if(file){ let name=Date.now()+"_"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_"); let {error}=await supa.storage.from('gmk-media').upload(name,file); if(error) throw error; let {data}=supa.storage.from('gmk-media').getPublicUrl(name); if(file.type.startsWith('video')) video_url=data.publicUrl; else image_url=data.publicUrl; }
+ let {error}=await 
+ supa.from('posts').insert({texte:t, image_url, video_url, youtube_url}); if(error) throw error;
+ status.innerText="✅ Publié!"; status.style.color="green"; document.getElementById('texte').value=""; document.getElementById('ytlink').value=""; document.getElementById('file').value=""; setTimeout(()=>status.innerText="",3000); load();
+ }catch(e){ status.innerText="❌ "+e.message; status.style.color="red";} btn.disabled=false; btn.innerText="📤 PUBLIER SUR GMK-COM";
 }
-function previewFile(input,type){
- const file=input.files[0]; if(!file) return;
- const reader=new FileReader();
- reader.onload=e=>{
-  mediaData=e.target.result; mediaType=type;
-  document.getElementById('preview').innerHTML=type=='img'?`<img src="${mediaData}">`:`<video controls src="${mediaData}"></video>`;
- };
- reader.readAsDataURL(file);
+async function react(id,field){ try{ let {data}=await supa.from('posts').select('likes,dislikes').eq('id',id).single(); let upd={}; upd[field]=(data[field]||0)+1; await supa.from('posts').update(upd).eq('id',id); load(); }catch(e){alert(e.message)} }
+async function commenter(pid){ let txt=prompt("Ton commentaire:"); if(!txt) return; await supa.from('commentaires').insert({post_id:pid, texte:txt}); load(); }
+async function load(){
+let {data:posts,error}=await supa.from('posts').select('*').order('created_at',{ascending:false}); if(error){document.getElementById('feed').innerHTML="<div class=card>❌ "+error.message+"</div>";return;}
+ let html=""; for(let p of posts){ let yid=ytId(p.youtube_url); let shareTxt=encodeURIComponent((p.texte||"Regarde sur GMK-COM")+" "+(p.youtube_url||""));
+ html+=`<div class="card"><div style="font-weight:bold">🕊️ GMK-COM <span style="color:#65676b;font-size:12px">• ${new Date(p.created_at).toLocaleString('fr-FR')}</span></div><div style="white-space:pre-wrap">${(p.texte||"").replace(/</g,"&lt;")}</div>${p.image_url?`<img src="${p.image_url}" style="width:100%;border-radius:10px;margin-top:8px">`:""}${p.video_url?`<video src="${p.video_url}" controls style="width:100%;border-radius:10px;margin-top:8px"></video>`:""}${yid?`<iframe class="yt" src="https://www.youtube.com/embed/${yid}" allowfullscreen></iframe>`:""}<div class="actions"><button onclick="react(${p.id},'likes')">❤️ ${p.likes||0}</button><button onclick="react($ 
+{p.id},'dislikes')">👎 ${p.dislikes||0}</button><button onclick="commenter(${p.id})">💬 Commenter</button><a href="https://wa.me/?text=${shareTxt}" target="_blank"><button style="background:#25D366">📱 WhatsApp</button></a><a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(p.youtube_url||p.image_url||'')}" target="_blank"><button style="background:#1877f2">📘 Facebook</button></a></div><div id="com-${p.id}"></div></div>`; }
+ document.getElementById('feed').innerHTML=html||"<div class=card style=text-align:center>Aucun post. Sois le premier! 🚀</div>";
+ for(let p of posts){ let {data:coms}=await supa.from('commentaires').select('*').eq('post_id',p.id).order('created_at'); if(coms&&coms.length){document.getElementById(`com-${p.id}`).innerHTML=coms.map(c=>`<div class="com">💬 ${c.texte.replace(/</g,"&lt;")}</div>`).join("");}}
 }
-function publier(){
- let t=document.getElementById('txtPost').value.trim();
- if(!t &&!mediaData) return;
- let save=t;
- if(mediaData) save=t+"|||"+mediaData;
- posts.unshift(save);
- localStorage.setItem('gmk_v3',JSON.stringify(posts));
- document.getElementById('txtPost').value=''; document.getElementById('preview').innerHTML=''; mediaData=null;
- afficherPosts();
-}
- function show(p){['Fil','Chats','NGOs','Coach'].forEach(x=>{document.getElementById('page'+x).style.display='none';document.getElementById('m'+x).classList.remove('active');});document.getElementById('page'+p).style.display='block';document.getElementById('m'+p).classList.add('active');if(p==='NGOs')afficherNGOs();}
-function afficherNGOs(){let ong='';Object.keys(NGOs).forEach(c=>{ong+=`<span class="onglet ${c===cat?'active-onglet':''}" onclick="cat='${c}';afficherNGOs()">${c}</span>`;});document.getElementById('onglets').innerHTML=ong;let list='<div class="card">';NGOs[cat].forEach(o=>{list+=`<p>🔹 <a href="${o.u}" target="_blank">${o.n}</a></p>`;});list+='</div>';document.getElementById('listeNGOs').innerHTML=list;}
-function coach(){document.getElementById('coachText').innerText="Avec GMK-COM, ensemble nous irons plus loin Chef!";}
-afficherPosts();afficherNGOs();
-</script>
-</body>
-</html>
+load();
+</script></body></html>
+ 
  
