@@ -1,11 +1,3 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GMK-COM</title><style>body{margin:0;font-family:Arial;background:#f5f7ff}.card{background:#fff;padding:15px;margin:10px;border-radius:12px}.btn{background:#0052cc;color:#fff;padding:12px;border:none;border-radius:10px;width:100%;font-weight:bold}.tab{position:fixed;bottom:0;width:100%;display:flex;background:#fff;border-top:1px solid #ccc}.tab button{flex:1;padding:14px;border:none}</style></head><body><div id="app"></div><script>
-const NGOS={"HUMANITAIRE":[{n:"UNHCR",u:"https://www.unhcr.org"},{n:"IRC",u:"https://www.rescue.org"},{n:"NRC",u:"https://www.nrc.no"}],"SANTE":[{n:"MSF",u:"https://www.msf.org"},{n:"ACF",u:"https://www.actioncontrelafaim.org"}],"ENFANCE":[{n:"UNICEF",u:"https://www.unicef.org"},{n:"Save Children",u:"https://www.savethechildren.net"}],"DEVELOPPEMENT":[{n:"CARE",u:"https://www.care-international.org"},{n:"OXFAM",u:"https://www.oxfam.org"}],"DROITS":[{n:"Amnesty",u:"https://www.amnesty.org"},{n:"WWF",u:"https://www.wwf.org"}]}
-let tab='fil';let coachRep='';
-function render(){let c='';if(tab=='fil')c=`<div class="card"><b>Aminata K.</b><p>200 arbres plantés 🌱</p>❤️24 💬8</div><div class="card"><input placeholder="Publier..." 
-style="width:90%;padding:10px"><button class="btn" style="margin-top:8px">Publier</button></div>`;if(tab=='chat')c=`<div class="card"><h3>Chats & Appels</h3><p>Textos, vocaux, vidéos, appels groupés</p><button class="btn" style="background:#25D366">Nouveau message</button></div>`;if(tab=='ngo'){let l='';for(let k in NGOS){l+=`<div class="card"><b>${k}</b>`+NGOS[k].map(o=>`<a href="${o.u}" target="_blank" style="display:block;margin:6px;color:#0052cc">🌐 ${o.n} → ${o.u}</a>`).join('')+`</div>`}c=`<div class="card"><h3>NGOs CONNECT</h3><input placeholder="Date création" style="width:90%;padding:8px;margin:4px"><input placeholder="N° récépissé" style="width:90%;padding:8px;margin:4px"><input placeholder="Domaine" style="width:90%;padding:8px;margin:4px"><input placeholder="Poste" style="width:90%;padding:8px;margin:4px"><button class="btn">Vérifier</button></div>${l}`;}if(tab=='coach')c=`<div class="card"><h3>GMK-COACH</h3><textarea id="q" style="width:90%;height:70px" placeholder="Ton coeur..."></textarea><button class="btn" onclick="doCoach()">Encouragement</button><div style="margin-top:10px;background:#eef2ff;padding:10px;border-radius:8px;white-space:pre-wrap">${coachRep}</div></div>`;document.getElementById('app').innerHTML=`<div style="text-align:center;padding:20px;background:linear-
-gradient(white,#dbe6ff)"><div style="font-size:50px">🕊️</div><h1 style="color:#0a2a6b">GMK-COM</h1><h3>BIENVENUE dans la Communauté GMK-COM!</h3><p>La Vision Nouvelle de la communication communautaire.</p><p style="color:#0052cc;font-weight:bold;border:2px dashed #0052cc;padding:10px;border-radius:10px;background:#fff">AVEC GMK-COM, ENSEMBLE NOUS IRONS PLUS LOIN!</p></div><div style="padding-bottom:60px">${c}</div><div class="tab"><button onclick="tab='fil';render()" style="${tab=='fil'?'background:#0052cc;color:white':''}">Fil</button><button onclick="tab='chat';render()" style="${tab=='chat'?'background:#0052cc;color:white':''}">Chats</button><button onclick="tab='ngo';render()" style="${tab=='ngo'?'background:#0052cc;color:white':''}">NGOs</button><button onclick="tab='coach';render()" style="${tab=='coach'?'background:#0052cc;color:white':''}">Coach</button></div>`;}
-function doCoach(){let q=document.getElementById('q').value;coachRep=`J'entends: "${q}"\n\n📖 BIBLE: Fortifie-toi et prends courage (Josué 1:9)\n\n📖 CORAN: Avec la difficulté vient la facilité (94:6)\n\n💙 Bois de l'eau, respire, tu n'es pas seul dans GMK-COM.`;render();}render();
-</script></body></html>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -13,83 +5,42 @@ function doCoach(){let q=document.getElementById('q').value;coachRep=`J'entends:
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GMK-COM</title>
 <style>
-body{font-family:Arial;max-width:500px;margin:auto;padding:10px}
-.bande{border:2px dashed #007bff;color:#007bff;text-align:center;padding:8px;font-weight:bold}
-.post{background:#f5f5f5;padding:10px;margin:10px 0;border-radius:8px}
-button{width:100%;background:#0055ff;color:white;padding:12px;border:none;border-radius:6px;font-weight:bold;cursor:pointer}
-input,textarea{width:95%;padding:10px;margin:5px 0}
-.menu{display:flex;position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #ccc}
-.menu div{flex:1;text-align:center;padding:12px;cursor:pointer}
+body{font-family:Arial;max-width:500px;margin:auto;padding:10px;padding-bottom:70px}
+.bande{border:2px dashed #007bff;color:#007bff;text-align:center;padding:8px;font-weight:bold;margin:10px 0}
+.card{background:#f5f5f5;padding:12px;margin:10px 0;border-radius:10px}
+button{width:100%;background:#0055ff;color:white;padding:12px;border:none;border-radius:6px;font-weight:bold;cursor:pointer;margin-top:5px}
+input,textarea{width:95%;padding:10px;margin:5px 0;border:1px solid #ccc;border-radius:6px}
+.menu{display:flex;position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #ccc;z-index:10}
+ .menu div{flex:1;text-align:center;padding:14px;cursor:pointer}
 .active{background:#0055ff;color:white}
+.onglet{display:inline-block;padding:6px 10px;background:#eee;border-radius:15px;margin:2px;font-size:12px;cursor:pointer}
+.onglet.active-onglet{background:#0055ff;color:white}
 </style>
 </head>
 <body>
 <center>
 <div style="font-size:40px">🕊️</div>
-<h1>GMK-COM</h1>
+<h2>GMK-COM</h2>
 <p><b>BIENVENUE dans la Communauté GMK-COM!</b><br>La Vision Nouvelle de la communication communautaire.</p>
 <div class="bande">AVEC GMK-COM, ENSEMBLE NOUS IRONS PLUS LOIN!</div>
 </center>
-
-<div id="pageFil">
-<div id="listePosts"></div>
-<input id="txtPost" placeholder="Bonjour a toutes et a tous!">
-<button onclick="publier()">Publier</button>
-</div>
-<div id="pageChats" style="display:none">
-<h3>Chats & Appels</h3>
-<p>Textos, vocaux, vidéos, appels groupés</p>
-<button>Nouveau message</button>
-</div>
-
-<div id="pageNGOs" style="display:none">
-<h3>NGOs CONNECT</h3>
-<p>🔹 HUMANITAIRE: UNHCR, IRC, NRC<br>🔹 SANTE: MSF, ACF<br>🔹 ENFANCE: UNICEF<br>🔹 DEVELOPPEMENT: CARE, OXFAM<br>🔹 DROITS: Amnesty, WWF</p>
-</div>
-
-<div id="pageCoach" style="display:none">
-<h3>GMK-COACH 🕊️</h3>
-<p id="coachText">Ton coeur est courageux Chef Georges!</p>
-<button onclick="encourager()">Encouragement</button>
-</div>
-
-<div style="height:60px"></div>
-<div class="menu">
-<div id="mFil" class="active" 
-onclick="show('Fil')">Fil</div>
-<div id="mChats" onclick="show('Chats')">Chats</div>
-<div id="mNGOs" onclick="show('NGOs')">NGOs</div>
-<div id="mCoach" onclick="show('Coach')">Coach</div>
-</div>
-
+<div id="pageFil"><div id="listePosts"></div><textarea id="txtPost" rows="2" 
+ placeholder="Bonjour à toutes et à tous!"></textarea><button onclick="publier()">Publier</button></div>
+<div id="pageChats" style="display:none"><h3>Chats & Appels</h3><div class="card">💬 Chat général - bientôt vocaux & appels</div></div>
+<div id="pageNGOs" style="display:none"><h3>NGOs CONNECT</h3><div id="onglets"></div><div id="listeNGOs"></div></div>
+<div id="pageCoach" style="display:none"><h3>GMK-COACH 🕊️</h3><div class="card" id="coachText">Ton coeur est courageux Chef!</div><input id="q" placeholder="Pose ta question..."><button onclick="coach()">Demander</button></div>
+<div class="menu"><div id="mFil" class="active" onclick="show('Fil')">Fil</div><div id="mChats" onclick="show('Chats')">Chats</div><div id="mNGOs" onclick="show('NGOs')">NGOs</div><div id="mCoach" onclick="show('Coach')">Coach</div></div>
 <script>
-let posts = JSON.parse(localStorage.getItem('gmk')||'["200 arbres plantés 🌱 - Aminata K. ❤️24 💬8"]');
-function afficher(){
- let h='';
- posts.forEach(p=>h+=`<div class="post"><b>${p}</b></div>`);
- document.getElementById('listePosts').innerHTML=h;
-}
-function publier(){
- let t=document.getElementById('txtPost').value;
- if(!t)return;
- posts.unshift("Vous: "+t);
-  localStorage.setItem('gmk',JSON.stringify(posts));
- document.getElementById('txtPost').value='';
- afficher();
-}
-function show(p){
- ['Fil','Chats','NGOs','Coach'].forEach(x=>{
-  document.getElementById('page'+x).style.display='none';
-  document.getElementById('m'+x).classList.remove('active');
- });
- document.getElementById('page'+p).style.display='block';
- document.getElementById('m'+p).classList.add('active');
-}
-function encourager(){
- const msgs=["Avec GMK-COM, ensemble nous irons plus loin!","Tu es sur la bonne voie Chef!","Chaque post construit la communauté!"];
- document.getElementById('coachText').innerText=msgs[Math.floor(Math.random()*msgs.length)];
-}
-afficher();
+ const NGOs={"HUMANITAIRE":[{n:"UNHCR",u:"https://www.unhcr.org"},{n:"IRC",u:"https://www.rescue.org"},{n:"NRC",u:"https://www.nrc.no"}],"SANTE":[{n:"MSF",u:"https://www.msf.org"},{n:"ACF",u:"https://www.actioncontrelafaim.org"}],"ENFANCE":[{n:"UNICEF",u:"https://www.unicef.org"}],"DEVELOPPEMENT":[{n:"CARE",u:"https://www.care.org"},{n:"OXFAM",u:"https://www.oxfam.org"}],"DROITS":[{n:"Amnesty",u:"https://www.amnesty.org"},{n:"WWF",u:"https://www.wwf.org"}]};
+let cat="HUMANITAIRE";
+let posts=JSON.parse(localStorage.getItem('gmk_v2')||'["Aminata K.: 200 arbres plantés 🌱 ❤️24 💬8"]');
+function afficherPosts(){let h='';posts.forEach(p=>h+=`<div class="card"><b>${p}</b></div>`);document.getElementById('listePosts').innerHTML=h;}
+ function publier(){let t=document.getElementById('txtPost').value.trim();if(!t)return;posts.unshift("Vous: "+t);localStorage.setItem('gmk_v2',JSON.stringify(posts));document.getElementById('txtPost').value='';afficherPosts();}
+function show(p){['Fil','Chats','NGOs','Coach'].forEach(x=>{document.getElementById('page'+x).style.display='none';document.getElementById('m'+x).classList.remove('active');});document.getElementById('page'+p).style.display='block';document.getElementById('m'+p).classList.add('active');if(p==='NGOs')afficherNGOs();}
+function afficherNGOs(){let ong='';Object.keys(NGOs).forEach(c=>{ong+=`<span class="onglet ${c===cat?'active-onglet':''}" onclick="cat='${c}';afficherNGOs()">${c}</span>`;});document.getElementById('onglets').innerHTML=ong;let list='<div class="card">';NGOs[cat].forEach(o=>{list+=`<p>🔹 <a href="${o.u}" target="_blank">${o.n}</a></p>`;});list+='</div>';document.getElementById('listeNGOs').innerHTML=list;}
+ function coach(){let q=document.getElementById('q').value;let rep=q?`J'entends: "${q}". Avec GMK-COM, ensemble nous irons plus loin!`:"Tu es courageux Chef Georges!";document.getElementById('coachText').innerText=rep;document.getElementById('q').value='';}
+afficherPosts();afficherNGOs();
 </script>
 </body>
-</html>
+</html> 
+ 
