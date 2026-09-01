@@ -3,44 +3,93 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GMK-COM</title>
+<title>GMK-COM V3</title>
 <style>
 body{font-family:Arial;max-width:500px;margin:auto;padding:10px;padding-bottom:70px}
 .bande{border:2px dashed #007bff;color:#007bff;text-align:center;padding:8px;font-weight:bold;margin:10px 0}
 .card{background:#f5f5f5;padding:12px;margin:10px 0;border-radius:10px}
+.card img,.card video{width:100%;border-radius:8px;margin-top:8px}
 button{width:100%;background:#0055ff;color:white;padding:12px;border:none;border-radius:6px;font-weight:bold;cursor:pointer;margin-top:5px}
-input,textarea{width:95%;padding:10px;margin:5px 0;border:1px solid #ccc;border-radius:6px}
+.btn2{background:#eee;color:#333;padding:8px;width:48%;display:inline-block}
+ input,textarea{width:95%;padding:10px;margin:5px 0;border:1px solid #ccc;border-radius:6px}
 .menu{display:flex;position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #ccc;z-index:10}
- .menu div{flex:1;text-align:center;padding:14px;cursor:pointer}
+.menu div{flex:1;text-align:center;padding:14px;cursor:pointer}
 .active{background:#0055ff;color:white}
 .onglet{display:inline-block;padding:6px 10px;background:#eee;border-radius:15px;margin:2px;font-size:12px;cursor:pointer}
 .onglet.active-onglet{background:#0055ff;color:white}
+#preview img,#preview video{width:100%;border-radius:8px;margin-top:5px}
 </style>
 </head>
 <body>
 <center>
 <div style="font-size:40px">🕊️</div>
 <h2>GMK-COM</h2>
-<p><b>BIENVENUE dans la Communauté GMK-COM!</b><br>La Vision Nouvelle de la communication communautaire.</p>
+<p><b>BIENVENUE dans la Communauté GMK-COM!</b><br>La Vision Nouvelle de la communication.</p>
 <div class="bande">AVEC GMK-COM, ENSEMBLE NOUS IRONS PLUS LOIN!</div>
 </center>
-<div id="pageFil"><div id="listePosts"></div><textarea id="txtPost" rows="2" 
- placeholder="Bonjour à toutes et à tous!"></textarea><button onclick="publier()">Publier</button></div>
-<div id="pageChats" style="display:none"><h3>Chats & Appels</h3><div class="card">💬 Chat général - bientôt vocaux & appels</div></div>
+
+<div id="pageFil">
+<div id="listePosts"></div>
+<textarea id="txtPost" rows="2" placeholder="Bonjour à toutes et à tous!"></textarea>
+<div id="preview"></div>
+<div style="display:flex;justify-content:space-between">
+<label class="btn2" style="text-align:center;border-radius:6px;cursor:pointer">📷 Photo<input type="file" id="fPhoto" accept="image/*" hidden onchange="previewFile(this,'img')"></label>
+<label class="btn2" style="text-align:center;border-radius:6px;cursor:pointer">🎥 Vidéo<input type="file" id="fVideo" accept="video/*" hidden onchange="previewFile(this,'vid')"></label>
+</div>
+<button onclick="publier()">Publier</button>
+</div>
+
 <div id="pageNGOs" style="display:none"><h3>NGOs CONNECT</h3><div id="onglets"></div><div id="listeNGOs"></div></div>
 <div id="pageCoach" style="display:none"><h3>GMK-COACH 🕊️</h3><div class="card" id="coachText">Ton coeur est courageux Chef!</div><input id="q" placeholder="Pose ta question..."><button onclick="coach()">Demander</button></div>
-<div class="menu"><div id="mFil" class="active" onclick="show('Fil')">Fil</div><div id="mChats" onclick="show('Chats')">Chats</div><div id="mNGOs" onclick="show('NGOs')">NGOs</div><div id="mCoach" onclick="show('Coach')">Coach</div></div>
+<div id="pageChats" style="display:none"><h3>Chats & Appels</h3><div class="card">💬 Bientôt vocaux & appels groupés</div></div>
+
+<div class="menu">
+<div id="mFil" class="active" onclick="show('Fil')">Fil</div>
+<div id="mChats" onclick="show('Chats')">Chats</div>
+<div id="mNGOs" onclick="show('NGOs')">NGOs</div>
+<div id="mCoach" onclick="show('Coach')">Coach</
+div>
+</div>
+
 <script>
- const NGOs={"HUMANITAIRE":[{n:"UNHCR",u:"https://www.unhcr.org"},{n:"IRC",u:"https://www.rescue.org"},{n:"NRC",u:"https://www.nrc.no"}],"SANTE":[{n:"MSF",u:"https://www.msf.org"},{n:"ACF",u:"https://www.actioncontrelafaim.org"}],"ENFANCE":[{n:"UNICEF",u:"https://www.unicef.org"}],"DEVELOPPEMENT":[{n:"CARE",u:"https://www.care.org"},{n:"OXFAM",u:"https://www.oxfam.org"}],"DROITS":[{n:"Amnesty",u:"https://www.amnesty.org"},{n:"WWF",u:"https://www.wwf.org"}]};
-let cat="HUMANITAIRE";
-let posts=JSON.parse(localStorage.getItem('gmk_v2')||'["Aminata K.: 200 arbres plantés 🌱 ❤️24 💬8"]');
-function afficherPosts(){let h='';posts.forEach(p=>h+=`<div class="card"><b>${p}</b></div>`);document.getElementById('listePosts').innerHTML=h;}
- function publier(){let t=document.getElementById('txtPost').value.trim();if(!t)return;posts.unshift("Vous: "+t);localStorage.setItem('gmk_v2',JSON.stringify(posts));document.getElementById('txtPost').value='';afficherPosts();}
-function show(p){['Fil','Chats','NGOs','Coach'].forEach(x=>{document.getElementById('page'+x).style.display='none';document.getElementById('m'+x).classList.remove('active');});document.getElementById('page'+p).style.display='block';document.getElementById('m'+p).classList.add('active');if(p==='NGOs')afficherNGOs();}
+const NGOs={"HUMANITAIRE":[{n:"UNHCR",u:"https://www.unhcr.org"},{n:"IRC",u:"https://www.rescue.org"}],"SANTE":[{n:"MSF",u:"https://www.msf.org"}],"ENFANCE":[{n:"UNICEF",u:"https://www.unicef.org"}],"DEVELOPPEMENT":[{n:"CARE",u:"https://www.care.org"}],"DROITS":[{n:"Amnesty",u:"https://www.amnesty.org"}]};
+let cat="HUMANITAIRE", mediaData=null, mediaType=null;
+let posts=JSON.parse(localStorage.getItem('gmk_v3')||'[]');
+if(posts.length==0) posts=["Aminata K.: 200 arbres plantés 🌱 ❤️24"];
+
+function afficherPosts(){
+ let h='';
+ posts.forEach(p=>{
+ if(p.includes('data:image')) h+=`<div class="card"><b>Vous:</b><br>${p.split('|||')[0]}<br><img src="${p.split('|||')[1]}"></div>`;
+  else if(p.includes('data:video')) h+=`<div class="card"><b>Vous:</b><br>${p.split('|||')[0]}<br><video controls src="${p.split('|||')[1]}"></video></div>`;
+  else h+=`<div class="card"><b>${p}</b></div>`;
+ });
+ document.getElementById('listePosts').innerHTML=h;
+}
+function previewFile(input,type){
+ const file=input.files[0]; if(!file) return;
+ const reader=new FileReader();
+ reader.onload=e=>{
+  mediaData=e.target.result; mediaType=type;
+  document.getElementById('preview').innerHTML=type=='img'?`<img src="${mediaData}">`:`<video controls src="${mediaData}"></video>`;
+ };
+ reader.readAsDataURL(file);
+}
+function publier(){
+ let t=document.getElementById('txtPost').value.trim();
+ if(!t &&!mediaData) return;
+ let save=t;
+ if(mediaData) save=t+"|||"+mediaData;
+ posts.unshift(save);
+ localStorage.setItem('gmk_v3',JSON.stringify(posts));
+ document.getElementById('txtPost').value=''; document.getElementById('preview').innerHTML=''; mediaData=null;
+ afficherPosts();
+}
+ function show(p){['Fil','Chats','NGOs','Coach'].forEach(x=>{document.getElementById('page'+x).style.display='none';document.getElementById('m'+x).classList.remove('active');});document.getElementById('page'+p).style.display='block';document.getElementById('m'+p).classList.add('active');if(p==='NGOs')afficherNGOs();}
 function afficherNGOs(){let ong='';Object.keys(NGOs).forEach(c=>{ong+=`<span class="onglet ${c===cat?'active-onglet':''}" onclick="cat='${c}';afficherNGOs()">${c}</span>`;});document.getElementById('onglets').innerHTML=ong;let list='<div class="card">';NGOs[cat].forEach(o=>{list+=`<p>🔹 <a href="${o.u}" target="_blank">${o.n}</a></p>`;});list+='</div>';document.getElementById('listeNGOs').innerHTML=list;}
- function coach(){let q=document.getElementById('q').value;let rep=q?`J'entends: "${q}". Avec GMK-COM, ensemble nous irons plus loin!`:"Tu es courageux Chef Georges!";document.getElementById('coachText').innerText=rep;document.getElementById('q').value='';}
+function coach(){document.getElementById('coachText').innerText="Avec GMK-COM, ensemble nous irons plus loin Chef!";}
 afficherPosts();afficherNGOs();
 </script>
 </body>
-</html> 
+</html>
  
