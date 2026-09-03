@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GMK-COM Dashboard - Chef</title>
+<style>
+body{font-family:Arial;background:#0f172a;color:white;margin:0;padding:20px}
+.lock{max-width:400px;margin:100px auto;background:white;color:#0f172a;padding:30px;border-radius:20px;text-align:center}
+.card{background:white;color:#0f172a;padding:20px;border-radius:15px;margin:10px 0}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.stat{background:#1e293b;color:white;padding:15px;border-radius:12px;text-align:center}
+.stat b{font-size:24px;display:block}
+input,button{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #ddd}
+button{background:#1e3a8a;color:white;border:none;font-weight:bold;cursor:pointer}
+  table{width:100%;border-collapse:collapse;margin-top:15px}
+th,td{padding:8px;border-bottom:1px solid #eee;text-align:left;font-size:14px}
+.hidden{display:none}
+</style>
+</head>
+<body>
+
+<div id="lock" class="lock">
+<h2>🔒 Dashboard Chef</h2>
+<p>Accès réservé Georges-Marie Kasso</p>
+<input type="password" id="code" placeholder="Code secret">
+<button onclick="unlock()">ENTRER</button>
+<p id="err" style="color:red"></p>
+</div>
+
+<div id="dash" class="hidden">
+<h1>🕊️ GMK-COM - Bilan</h1>
+<p>Site: gmk-com.vercel.app | Camp Ampain</p>
+
+<div class="stats">
+<div class="stat"><b id="total">0</b>Total inscrits</div
+div>
+<div class="stat"><b id="semaine">0</b>Cette semaine</div>
+<div class="stat"><b id="mois">0</b>Ce mois</div>
+</div>
+
+<div class="card">
+<h3>📋 Liste des membres</h3>
+<button onclick="exportCSV()">📥 Exporter Excel pour ONG</button>
+<table><thead><tr><th>Nom</th><th>Téléphone</th><th>Date</th></tr></thead><tbody id="list"></tbody></table>
+</div>
+
+<div class="card">
+<h3>🌍 CONNECT - ONG</h3>
+<p>Total personnes à connecter: <b id="connectTotal">0</b></p>
+<p>Ce chiffre c'est ton business! Tu peux aller voir HCR, UNICEF avec cet Excel.</p>
+<a href="https://gmk-com.vercel.app" target="_blank"><button>Retour au site d'inscription</button></a>
+</div>
+</div>
+
+<script>
+function unlock(){
+ if(document.getElementById('code').value==='2026'){
+   document.getElementById('lock').classList.add('hidden');
+   document.getElementById('dash').classList.remove('hidden');
+   loadData();
+ } else {
+   document.getElementById('err').innerText='Code incorrect! C\'est 2026';
+ }
+}
+function loadData(){
+ let users = JSON.parse(localStorage.getItem('gmk_users')||'[]');
+// Si tu as testé avec Georges-Marie 0552813337 il est dedans
+ let today = new Date().toDateString();
+ let jour = users.filter(u=>new Date(u.date).toDateString()===today).length;
+ document.getElementById('total').innerText=users.length;
+ document.getElementById('jour').innerText=jour;
+ document.getElementById('semaine').innerText=users.length; // simplifié
+ document.getElementById('mois').innerText=users.length;
+ document.getElementById('connectTotal').innerText=users.length;
+ let html='';
+ users.reverse().forEach(u=>{
+  html+=`<tr><td>${u.nom}</td><td>+233 ${u.tel}</td><td>${new Date(u.date).toLocaleString()}</td></tr>`;
+ });
+ document.getElementById('list').innerHTML=html||'<tr><td colspan=3>Aucun inscrit encore (vide ton cache localStorage si tu testes sur autre ordi)</td></tr>';
+}
+function exportCSV(){
+ let users = JSON.parse(localStorage.getItem('gmk_users')||'[]');
+ let csv='Nom,Telephone,Date\n';
+ users.forEach(u=>{csv+=`${u.nom},${u.tel},${u.date}\n`;});
+ let blob=new Blob([csv],{type:'text/csv'});
+ let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='GMK-COM-ONG-Connect.csv';a.click();
+}
+</script>
+</body>
+</html>
+  
