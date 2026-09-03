@@ -1,34 +1,6 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GMK-COM - Inscription</title>
-<script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-[#EAF2FF] flex justify-center">
-<div class="w-full max-w-[430px] bg-white min-h-screen">
-<div class="bg-[#0A3A8A] text-center pt-8 pb-6 rounded-b-[35px]">
-<div class="w-24 h-24 bg-white rounded-full mx-auto flex items-center justify-center"><span style="font-size:50px">🕊️</span></div>
-<h1 class="text-[#D4AF37] text-[32px] font-black">GMK-COM</h1>
-<p class="text-white font-bold">Peace Community</p>
-</div>
-<div class="p-5">
-<h2 class="font-black text-center">Créer votre compte - Gratuit</h2>
-<input id="nom" placeholder="Nom complet" class="w-full mt-4 p-3.5 rounded-full bg-[#F4F7FF] border">
-<input id="email" type="email" placeholder="georgeskasso3@gmail.com" class="w-full mt-3 p-3.5 rounded-full bg-[#F4F7FF] border">
-<div class="flex mt-3"><span class="bg-[#0A3A8A] text-white px-3 py-3.5 rounded-l-full">+233</span><input id="phone" placeholder="24 123 4567" class="flex-1 p-3.5 rounded-r-full bg-[#F4F7FF] border"></div>
-<div class="relative mt-3"><input id="pass1" type="password" placeholder="Mot de passe" class="w-full p-3.5 rounded-full bg-[#F4F7FF] border pr-12"><span onclick="toggle('pass1')" class="absolute right-4 top-3.5 cursor-pointer">👁️</span></div>
-<div class="relative mt-3"><input id="pass2" type="password" placeholder="Confirmer mot de passe" class="w-full p-3.5 rounded-full bg-[#F4F7FF] border pr-12"><span 
-onclick="toggle('pass2')" class="absolute right-4 top-3.5 cursor-pointer">👁️</span></div>
-<button onclick="alert('Compte créé!')" class="w-full bg-[#0A3A8A] text-white p-4 rounded-full font-black mt-6">S'INSCRIRE GRATUITEMENT</button>
-</div>
-</div>
-<script>
-function toggle(id){const i=document.getElementById(id);i.type=i.type==='password'?'text':'password';}
-</script>
-</body>
-</html>
-
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>GMK-COM - Inscription</title><style>body{font-family:Arial;background:linear-gradient(135deg,#1e3a8a,#3b82f6);min-height:100vh;display:flex;align-items:center;justify-content:center;margin:0;padding:20px}.box{background:white;padding:30px;border-radius:20px;max-width:400px;width:100%;box-shadow:0 20px 40px rgba(0,0,0,0.2)}h1{text-align:center;color:#1e3a8a}input{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:2px solid #e5e7eb;box-sizing:border-box}button{width:100%;padding:14px;background:#1e3a8a;color:white;border:none;border-radius:12px;font-weight:bold;cursor:pointer;margin-top:10px}.pwd{position:relative}.pwd span{position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer}</style></head><body><div class="box"><h1>🕊️ GMK-COM</
+h1><p style="text-align:center">Inscription Gratuite - Camp Ampain</p><input id="nom" placeholder="Nom complet *"><input id="tel" placeholder="0552813337 *"><div class="pwd"><input id="p1" type="password" placeholder="Mot de passe *"><span onclick="this.previousElementSibling.type=this.previousElementSibling.type==='password'?'text':'password'">👁️</span></div><div class="pwd"><input id="p2" type="password" placeholder="Confirmer *"><span onclick="this.previousElementSibling.type=this.previousElementSibling.type==='password'?'text':'password'">👁️</span></div><button onclick="inscrire()">S'INSCRIRE GRATUITEMENT</button><p style="text-align:center;font-size:12px;margin-top:15px"><a href="dashboard.html">Dashboard Chef (2026)</a></p></div><script>function inscrire(){let n=document.getElementById('nom').value.trim(),t=document.getElementById('tel').value.trim(),a=document.getElementById('p1').value,b=document.getElementById('p2').value;if(!n||!t||!a){alert('Remplis tout!');return}if(a!==b)
+{alert('Mots de passe différents!');return}let users=JSON.parse(localStorage.getItem('gmk_users')||'[]');users.push({nom:n,tel:t,date:new Date().toISOString()});localStorage.setItem('gmk_users',JSON.stringify(users));alert('Compte créé! '+n+' Bienvenue chez GMK-COM 🕊️');document.getElementById('nom').value='';document.getElementById('tel').value='';document.getElementById('p1').value='';document.getElementById('p2').value='';}</script></body></html>
 
   
