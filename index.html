@@ -1,19 +1,67 @@
-<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GMK-COM</title><style>body{font-family:Arial;background:#eef2ff;margin:0;padding:8px}.box{background:white;padding:15px;border-radius:12px;max-width:500px;margin:auto}.post{border:1px solid #ddd;padding:10px;border-radius:10px;margin:10px 0}input,textarea,select{width:100%;padding:10px;margin:4px 0;border-radius:8px;border:1px solid #ccc;box-sizing:border-box}button{padding:9px 12px;background:#1e3a8a;color:white;border:none;border-radius:6px;font-weight:bold;cursor:pointer}.cmt{background:#f3f4f6;padding:5px;border-radius:5px;margin:3px 0;font-size:13px}</style></head><body>
-<div id="insc" class="box"><h2>🕊️ GMK-COM Inscription</h2>
+<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GMK-COM</title><style>
+*{box-sizing:border-box;margin:0}body{font-family:Arial;background:#f0f2f5}
+.top{background:white;padding:8px 12px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;box-shadow:0 1px 2px #0001}
+.top h1{color:#0866ff;font-size:28px;font-weight:900}
+.box{max-width:550px;margin:auto;background:white}
+.insc{padding:20px;max-width:400px;margin:30px auto;background:white;border-radius:12px;box-shadow:0 2px 10px #0002}
+input,select{width:100%;padding:12px;margin:6px 0;border-radius:8px;border:1px solid #ccc}
+.storyBar{display:flex;gap:8px;padding:10px;overflow-x:auto;background:white;border-bottom:1px solid #ddd}
+.story{min-width:110px;height:190px;border-radius:12px;background:#000;position:relative;overflow:hidden;flex-shrink:0}
+.story img{width:100%;height:100%;object-fit:cover}
+.story b{position:absolute;bottom:6px;left:6px;color:white;font-size:12px;text-shadow:0 1px 3px #000}
+.create{background:white;padding:10px;display:flex;gap:8px;align-items:center;border-bottom:8px solid #f0f2f5}
+.create img{width:40px;height:40px;border-radius:50%}
+.create div{background:#f0f2f5;padding:10px 15px;border-radius:20px;flex:1;color:#555}
+.post{background:white;margin-bottom:8px;padding:10px}
+.postHead{display:flex;justify-content:space-between}
+.postHead b{font-size:15px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:8px}
+.grid2 img{width:100%;height:200px;object-fit:cover}
+.actions{display:flex;justify-content:space-around;padding:8px 0;border-top:1px solid #ddd;margin-top:8px}
+.actions button{background:none;border:none;font-weight:bold;color:#65676b}
+.bottomNav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:10px;border-top:1px solid #ddd;max-width:550px;margin:auto}
+.bottomNav span{font-size:24px;position:relative}
+.badge{background:red;color:white;font-size:10px;padding:2px 5px;border-radius:10px;position:absolute;top:-5px;right:-10px}
+.cmt{background:#f0f2f5;padding:6px 10px;border-radius:15px;margin:4px 0;font-size:13px}
+</style></head><body>
+<div id="insc" class="insc"><h2 style="color:#0866ff;text-align:center">🕊️ GMK-COM</h2><p style="text-align:center">Inscription</p>
 <input id="nom" placeholder="Nom complet">
-<input id="email" type="email" placeholder="Ton E-MAIL (ex: toi@gmail.com)">
-<div style="display:flex;gap:5px"><select id="ind" style="width:40%"><option value="+233">🇬🇭 +233</option><option value="+225">🇨🇮 +225</option><option value="+228">🇹🇬 +228</option><option value="+229">🇧🇯 +229</option><option value="+33">🇫🇷 +33</option><option value="+1">🇺🇸 +1</option></select><input id="tel" placeholder="Numéro" style="width:60%"></div>
-<div style="display:flex;align-items:center;position:relative"><input id="pass" type="password" placeholder="Mot de passe" style="padding-right:40px"><span onclick="if(pass.type=='password'){pass.type='text';this.innerText='🙈'}else{pass.type='password';this.innerText='👁️'}" style="position:absolute;right:10px;cursor:pointer;font-size:20px">👁️</span></div>
-<button style="width:100%" onclick="go()">S'INSCRIRE AVEC E-MAIL 🌍</button></div>
-<div id="app" class="box" style="display:none"><h2>GMK-COM</h2><p>Salut <b id="me"></b>! Email: <span id="myEmail"></span></p><textarea id="txt" placeholder="Quoi de neuf?"></textarea><input type="file" id="file" accept="image/*,video/*"><div id="prev"></div><button style="width:100%" onclick="post()">PUBLIER 🚀</button><div id="feed"></div></div>
+<input id="email" type="email" placeholder="E-MAIL">
+<div style="display:flex;gap:5px"><select id="ind" style="width:35%"><option value="+233">🇬🇭 +233</option><option value="+225">🇨🇮 +225</option><option value="+228">🇹🇬 +228</option><option value="+229">🇧🇯 +229</option><option value="+33">🇫🇷 +33</option></select><input id="tel" placeholder="Numéro" style="width:65%"></div>
+<div style="display:flex;align-items:center;position:relative"><input id="pass" type="password" placeholder="Mot de passe"><span onclick="if(pass.type=='password'){pass.type='text';this.innerText='🙈'}else{pass.type='password';this.innerText='👁️'}" style="position:absolute;right:12px;cursor:pointer">👁️</span></div>
+<button onclick="go()" style="width:100%;background:#0866ff;color:white;padding:12px;border:none;border-radius:8px;font-weight:bold;margin-top:8px">S'INSCRIRE 🌍</button></div>
+
+<div id="app" style="display:none">
+<div class="box">
+<div class="top"><h1>gmk-com</h1><div style="display:flex;gap:15px;font-size:22px"><span>➕</span><span>🔍</span><span>💬</span></div></div>
+
+<div class="create" onclick="document.getElementById('txt').focus()"><img src="https://i.pravatar.cc/100"><div>Quoi de neuf, <span id="me"></span>?</div><span style="font-size:22px">🖼️</span></div>
+<div class="storyBar">
+<div class="story" style="background:#e4e6eb;display:flex;flex-direction:column;align-items:center;justify-content:center"><div style="font-size:40px">➕</div><b style="color:black">Créer story</b></div>
+<div class="story"><img src="https://picsum.photos/110/190?1"><b>Alao Ayodele</b></div>
+<div class="story"><img src="https://picsum.photos/110/190?2"><b>Mr Odi</b></div>
+<div class="story"><img src="https://picsum.photos/110/190?3"><b>The Ball</b></div>
+</div>
+
+<div style="background:white;padding:10px;border-bottom:8px solid #f0f2f5"><textarea id="txt" placeholder="Quoi de neuf?" style="width:100%;border:none;outline:none;resize:none;font-size:18px"></textarea><input type="file" id="file" accept="image/*,video/*"><div id="prev"></div><button onclick="post()" style="width:100%;background:#0866ff;color:white;padding:10px;border:none;border-
+              radius:8px;margin-top:8px">Publier 🚀</button></div>
+
+<div id="feed"></div>
+<div style="height:60px"></div>
+</div>
+
+<div class="bottomNav"><span style="color:#0866ff">🏠</span><span>🎥</span><span>👥</span><span>🏪</span><span>🔔<b class="badge">9+</b></span><span>👤<b class="badge">9+</b></span></div>
+</div>                                                                                                                                                                                                                                                                           
 <script>
 let moi=JSON.parse(localStorage.getItem('gmk')||'null'),posts=JSON.parse(localStorage.getItem('posts')||'[]'),med=null,medType=null;
-if(moi){insc.style.display='none';app.style.display='block';me.innerText=moi.nom;myEmail.innerText=moi.email;show();}
-file.onchange=e=>{let f=e.target.files[0];let r=new FileReader();r.onload=x=>{med=x.target.result;medType=f.type.includes('video')?'video':'photo';prev.innerHTML=medType=='photo'?`<img src="${med}" style="width:100%">`:`<video src="${med}" controls 
-style="width:100%">`};r.readAsDataURL(f);}
-function go(){let n=nom.value,e=email.value,t=tel.value,p=pass.value;if(!n||!e||!t)return alert('Remplis Nom + Email + Tel');moi={nom:n,email:e,tel:ind.value+t,pass:p};localStorage.setItem('gmk',JSON.stringify(moi));insc.style.display='none';app.style.display='block';me.innerText=n;myEmail.innerText=e;show();}
-function post(){let t=txt.value;if(!t&&!med)return;posts.push({id:Date.now(),auteur:moi.nom,email:moi.email,texte:t,media:med,type:medType,likes:0,coms:[]});localStorage.setItem('posts',JSON.stringify(posts));txt.value='';prev.innerHTML='';med=null;show();}
+if(moi){insc.style.display='none';app.style.display='block';me.innerText=moi.nom;show();}
+file.onchange=e=>{let f=e.target.files[0];let r=new FileReader();r.onload=x=>{med=x.target.result;medType=f.type.includes('video')?'video':'photo';prev.innerHTML=medType=='photo'?`<img src="${med}" style="width:100%;border-radius:10px">`:`<video src="${med}" controls style="width:100%">`};r.readAsDataURL(f);}
+function go(){let n=nom.value,e=email.value,t=tel.value;if(!n||!e||!t)return alert('Nom + Email + Tel obligatoire');moi={nom:n,email:e,tel:ind.value+t};localStorage.setItem('gmk',JSON.stringify(moi));insc.style.display='none';app.style.display='block';me.innerText=n;show();}
+function post(){let t=txt.value;if(!t&&!med)return;posts.push({id:Date.now(),auteur:moi.nom,texte:t,media:med,type:medType,likes:0,coms:[],time:'1 h'});localStorage.setItem('posts',JSON.stringify(posts));txt.value='';prev.innerHTML='';med=null;show();}
 function like(id){let p=posts.find(x=>x.id==id);p.likes++;localStorage.setItem('posts',JSON.stringify(posts));show();}
 function commenter(id){let c=prompt('Ton commentaire:');if(!c)return;let p=posts.find(x=>x.id==id);p.coms.push({a:moi.nom,t:c});localStorage.setItem('posts',JSON.stringify(posts));show();}
-function show(){let h='';posts.slice().reverse().forEach(p=>{let m=p.media?(p.type=='photo'?`<img src="${p.media}" style="width:100%;border-radius:8px">`:`<video src="${p.media}" controls style="width:100%">`):'';let cm=p.coms.map(x=>`<div class="cmt"><b>${x.a}:</b> ${x.t}</div>`).join('');h+=`<div class="post"><b>${p.auteur}</b> <small>${p.email}</small><p>${p.texte||''}</p>${m}<br><button onclick="like(${p.id})">👍 ${p.likes}</button> <button onclick="commenter(${p.id})">💬 Commenter (${p.coms.length})</button><div>${cm}</div></div>`});feed.innerHTML=h||'Pas encore de post';}
+function show(){let h='';posts.slice().reverse().forEach(p=>{let m='';if(p.media){if(p.type=='photo')m=`<img src="${p.media}" style="width:100%;margin-top:8px">`;else m=`<video src="${p.media}" controls style="width:100%;margin-top:8px">`;if(posts.length>1)m=`<div class="grid2"><img src="${p.media}"><img 
+src="https://picsum.photos/300/200?${p.id}"><img src="https://picsum.photos/300/200?${p.id+1}"><img src="https://picsum.photos/300/200?${p.id+2}"></div>`}let cm=p.coms.map(x=>`<div class="cmt"><b>${x.a}:</b> ${x.t}</div>`).join('');h+=`<div class="post"><div class="postHead"><div style="display:flex;gap:8px"><img src="https://i.pravatar.cc/40?u=${p.id}" style="width:40px;height:40px;border-radius:50%"><div><b>${p.auteur} • CAN 2024</b><br><small>${p.time} • 🌍</small></div></div><b>⋯ X</b></div><p style="margin:8px 0">🔴 ${p.texte||'Un TRANSFERT RECORD pour Yan Diomandé, un crack désormais à la Fiorentina... la Côte d\'Ivoire 🇨🇮 a égale...'}</p>${m}<div style="display:flex;justify-content:space-between;font-size:13px;color:#65676b;padding:6px 0"><span>👍 ${p.likes}</span><span>$
+{p.coms.length} commentaires</span></div><div class="actions"><button onclick="like(${p.id})">👍 J'aime</button><button onclick="commenter(${p.id})">💬 Commenter</button><button>↗️ Partager</button></div><div>${cm}</div></div>`});feed.innerHTML=h||`<div class="post"><div class="postHead"><div style="display:flex;gap:8px"><img src="https://picsum.photos/40" style="width:40px;height:40px;border-radius:50%"><div><b>CAN 2024 Côte d'Ivoire</b><br><small>1 h • 🌍</small></div></div><b>⋯ X</b></div><p>🔴 Un TRANSFERT RECORD pour Yan Diomandé, un crack désormais à la Fiorentina... la Côte d'Ivoire 🇨🇮 a égale... plus</p><div class="grid2"><img src="https://picsum.photos/300/300?1"><img src="https://picsum.photos/300/300?2"><img src="https://picsum.photos/300/300?3"><img src="https://picsum.photos/300/300?4"></div><div class="actions"><button>👍 J'aime</button><button>💬 Commenter</button><button>↗️ Partager</button></div></div>`;}
 </script></body></html>
+  
