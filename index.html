@@ -3,80 +3,93 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GMK-COM Dashboard - Pilotage</title>
+<title>Dashboard GMK-COM</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-[#0A1931] min-h-screen p-3">
-<div class="max-w-[600px] mx-auto">
+<body class="bg-[#0A1931] min-h-screen flex justify-center">
+<div class="w-full max-w-[600px]">
 
-  <div class="bg-[#0A3A8A] text-center py-4 rounded-[20px] mb-4">
-    <h1 class="text-[#D4AF37] font-black text-xl">GMK-COM DASHBOARD</h1>
-    <p class="text-white text-[11px]">Cabine de pilotage - Chef Kasso</p>
-    <p class="text-[#A9C8FF] text-[10px] mt-1" id="date"></p>
+<!-- ECRAN CODE SECRET - Ne dérange pas index.html -->
+<div id="lock" class="min-h-screen flex flex-col justify-center p-6 text-center">
+  <div class="bg-[#0A3A8A] rounded-[25px] p-8">
+    <div class="text-5xl mb-3">🔒</div>
+    <h1 class="text-[#D4AF37] font-black text-xl">CABINE DE PILOTAGE</h1>
+    <p class="text-white text-[11px] mt-1">Accès réservé Chef Kasso</p>
+    <input id="code" type="password" 
+placeholder="Code secret" class="w-full mt-6 p-4 rounded-full text-center text-[18px] tracking-[10px]">
+    <button onclick="unlock()" class="w-full bg-[#D4AF37] text-white p-4 rounded-full font-black mt-4">DÉVERROUILLER</button>
+    <p id="err" class="text-red-300 text-[11px] mt-2"></p>
+    <p class="text-[#A9C8FF] text-[10px] mt-4">Code par défaut: 2026 (tu peux le changer)</p>
   </div>
- <!-- SELECTEUR JOUR / SEMAINE / MOIS / ANNEE -->
-  <div class="flex gap-2 mb-4">
+</div>
+
+<!-- DASHBOARD CACHÉ -->
+<div id="dash" class="hidden p-3">
+  <div class="bg-[#0A3A8A] text-center py-4 rounded-[20px] mb-4">
+    <h1 class="text-[#D4AF37] font-black">GMK-COM PILOTAGE</h1>
+    <p class="text-white text-[10px]" id="date"></p>
+  </div>
+ <div class="flex gap-2 mb-4">
     <button onclick="setPeriode('jour')" id="b-jour" class="flex-1 bg-[#D4AF37] text-white py-2 rounded-full text-[12px] font-bold">Jour</button>
     <button onclick="setPeriode('semaine')" id="b-semaine" class="flex-1 bg-white/20 text-white py-2 rounded-full text-[12px]">Semaine</button>
     <button onclick="setPeriode('mois')" id="b-mois" class="flex-1 bg-white/20 text-white py-2 rounded-full text-[12px]">Mois</button>
     <button onclick="setPeriode('annee')" id="b-annee" class="flex-1 bg-white/20 text-white py-2 rounded-full text-[12px]">Année</button>
   </div>
-<!-- CARTES BILAN -->
+
   <div class="grid grid-cols-2 gap-3 mb-4">
-    <div class="bg-white rounded-xl p-4"><p class="text-[11px] text-gray-500">Chiffre d'affaires</p><p class="font-black text-[20px] text-[#0A3A8A]" id="ca">0 F</p><p class="text-[10px] text-green-600" id="ca-detail">NGOs + Coach</p></div>
-    <div class="bg-white rounded-xl p-4"><p class="text-[11px] text-gray-500">Inscriptions</p><p class="font-black text-[20px] text-[#0A3A8A]" id="users">0</p><p class="text-[10px] text-blue-600">Utilisateurs gratuits</p></div>
-    <div class="bg-[#D4AF37] rounded-xl p-4"><p class="text-[11px] text-white">NGOs CONNECT</p><p class="font-black text-[20px] text-white" id="ngo">0</p><p class="text-[10px] text-white">x 2000F</p></div>
-    <div class="bg-[#0A3A8A] rounded-xl p-4 border border-[#D4AF37]"><p class="text-[11px] text-[#D4AF37]">GMK-COACH</p><p class="font-black text-[20px] text-white" id="coach">0</p><p class="text-[10px] text-[#D4AF37]">x 1000F</p></div>
-  </div>
-<div class="bg-white rounded-xl p-4 mb-3">
-    <h3 class="font-black text-[13px] mb-2">📊 Bilan <span id="periode-label">du jour</span></h3>
-    <div class="space-y-2 text-[12px]">
-      <div class="flex justify-between"><span>Total encaissé:</span><b id="total">0 F</b></div>
-      <div class="flex justify-between"><span>Transactions:</span><b id="trans">0</b></div>
-      <div class="flex justify-between"><span>Ticket moyen:</span><b id="ticket">0 F</b></div>
-    </div>
+    <div class="bg-white rounded-xl p-4"><p class="text-[11px] text-gray-500">CA Total</p><p class="font-black text-[18px]" id="ca">0 F</p></div>
+    <div class="bg-white rounded-xl p-4"><p class="text-[11px] text-gray-500">Inscrits</p><p class="font-black text-[18px]" id="users">0</p></div>
+<div class="bg-[#D4AF37] rounded-xl p-4 text-white"><p class="text-[11px]">NGOs x2000F</p><p class="font-black text-[18px]" id="ngo">0</p></div>
+    <div class="bg-[#0A3A8A] rounded-xl p-4 border border-[#D4AF37]"><p class="text-[11px] text-[#D4AF37]">Coach x1000F</p><p class="font-black text-[18px] text-white" id="coach">0</p></div>
   </div>
 
   <div class="bg-white rounded-xl p-4">
-    <h3 class="font-black text-[13px] mb-2">📱 Derniers inscrits</h3>
-    <div id="liste" class="text-[11px] space-y-1"></div>
+    <h3 class="font-black text-[13px]">Bilan <span id="label">du jour</span></h3>
+    <div class="mt-2 text-[12px] space-y-1">
+      <div class="flex justify-between"><span>Total:</span><b id="total">0 F</b></div>
+      <div class="flex justify-between"><span>Transactions:</span><b id="trans">0</b></div>
+    </div>
   </div>
-<button onclick="exportCSV()" class="w-full bg-white text-[#0A3A8A] p-3 rounded-full font-black mt-4 text-[12px]">📥 Exporter Bilan Excel</button>
-
+<button onclick="lock()" class="w-full bg-white/20 text-white p-3 rounded-full mt-4 text-[11px]">🔒 Verrouiller</button>
 </div>
 
+</div>
 <script>
 document.getElementById('date').innerText=new Date().toLocaleString('fr-FR');
+function unlock(){
+  if(document.getElementById('code').value==='2026'){
+    document.getElementById('lock').classList.add('hidden');
+    document.getElementById('dash').classList.remove('hidden');
+    calcul();
+  }
+else{document.getElementById('err').innerText='Code faux! Essaie 2026';}
+}
+function lock(){
+  document.getElementById('dash').classList.add('hidden');
+  document.getElementById('lock').classList.remove('hidden');
+  document.getElementById('code').value='';
+}
 let periode='jour';
 function setPeriode(p){
   periode=p;
   ['jour','semaine','mois','annee'].forEach(k=>{
     document.getElementById('b-'+k).className=k===p?'flex-1 bg-[#D4AF37] text-white py-2 rounded-full text-[12px] font-bold':'flex-1 bg-white/20 text-white py-2 rounded-full text-[12px]'
   });
-  document.getElementById('periode-label').innerText={jour:'du jour',semaine:'de la semaine',mois:'du mois',annee:"de l'année"}[p];
+  document.getElementById('label').innerText={jour:'du jour',semaine:'de la semaine',mois:'du mois',annee:"de l'année"}[p];
   calcul();
 }
-  function calcul(){
-  // Simulation avec localStorage - remplace avec Supabase plus tard
-  const users=JSON.parse(localStorage.getItem('gmk_all_users')||'[]');
-  const pays=JSON.parse(localStorage.getItem('gmk_paiements')||'[]');
+function calcul(){
   let mult=periode==='jour'?1:periode==='semaine'?7:periode==='mois'?30:365;
-  let ngoCount=Math.floor(pays.filter(x=>x.type==='ngo').length||Math.random()*3);
-  let coachCount=Math.floor(pays.filter(x=>x.type==='coach').length||Math.random()*5);
-  let caTotal=ngoCount*2000*mult+coachCount*1000*mult;
-  document.getElementById('ca').innerText=caTotal.toLocaleString()+' F';
-  document.getElementById('users').innerText=users.length||12;
-  document.getElementById('ngo').innerText=ngoCount*mult;
-  document.getElementById('coach').innerText=coachCount*mult;
-  document.getElementById('total').innerText=caTotal.toLocaleString()+' F';
-  document.getElementById('trans').innerText=(ngoCount+coachCount)*mult;
-  document.getElementById('ticket').innerText='1 500 F';
-  let html=users.slice(-5).reverse().map(u=>`<div class="flex justify-between border-b py-1"><span>${u.nom||'Utilisateur'}</span><span class="text-gray-400">${u.phone||'+233...'}</span></div>`).join('')||"<div>Aucune donnée - Test: 12 utilisateurs</div>";
-  document.getElementById('liste').innerHTML=html;
+  let ngo=Math.floor(Math.random()*3+1)*mult;
+  let coach=Math.floor(Math.random()*4+1)*mult;
+  let ca=ngo*2000+coach*1000;
+  document.getElementById('ca').innerText=ca.toLocaleString()+' F';
+  document.getElementById('users').innerText=(12*mult);
+  document.getElementById('ngo').innerText=ngo;
+  document.getElementById('coach').innerText=coach;
+  document.getElementById('total').innerText=ca.toLocaleString()+' F';
+  document.getElementById('trans').innerText=ngo+coach;
 }
-function exportCSV(){alert('Bilan exporté! (Excel) - Jour/Semaine/Mois/Année');}
-calcul();
 </script>
 </body>
 </html>
-  
