@@ -3,93 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Dashboard GMK-COM</title>
+<title>GMK-COM - Inscription</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-[#0A1931] min-h-screen flex justify-center">
-<div class="w-full max-w-[600px]">
-
-<!-- ECRAN CODE SECRET - Ne dérange pas index.html -->
-<div id="lock" class="min-h-screen flex flex-col justify-center p-6 text-center">
-  <div class="bg-[#0A3A8A] rounded-[25px] p-8">
-    <div class="text-5xl mb-3">🔒</div>
-    <h1 class="text-[#D4AF37] font-black text-xl">CABINE DE PILOTAGE</h1>
-    <p class="text-white text-[11px] mt-1">Accès réservé Chef Kasso</p>
-    <input id="code" type="password" 
-placeholder="Code secret" class="w-full mt-6 p-4 rounded-full text-center text-[18px] tracking-[10px]">
-    <button onclick="unlock()" class="w-full bg-[#D4AF37] text-white p-4 rounded-full font-black mt-4">DÉVERROUILLER</button>
-    <p id="err" class="text-red-300 text-[11px] mt-2"></p>
-    <p class="text-[#A9C8FF] text-[10px] mt-4">Code par défaut: 2026 (tu peux le changer)</p>
-  </div>
+<body class="bg-[#EAF2FF] flex justify-center">
+<div class="w-full max-w-[430px] bg-white min-h-screen">
+<div class="bg-[#0A3A8A] text-center pt-8 pb-6 rounded-b-[35px]">
+<div class="w-24 h-24 bg-white rounded-full mx-auto flex items-center justify-center"><span style="font-size:50px">🕊️</span></div>
+<h1 class="text-[#D4AF37] text-[32px] font-black">GMK-COM</h1>
+<p class="text-white font-bold">Peace Community</p>
 </div>
-
-<!-- DASHBOARD CACHÉ -->
-<div id="dash" class="hidden p-3">
-  <div class="bg-[#0A3A8A] text-center py-4 rounded-[20px] mb-4">
-    <h1 class="text-[#D4AF37] font-black">GMK-COM PILOTAGE</h1>
-    <p class="text-white text-[10px]" id="date"></p>
-  </div>
- <div class="flex gap-2 mb-4">
-    <button onclick="setPeriode('jour')" id="b-jour" class="flex-1 bg-[#D4AF37] text-white py-2 rounded-full text-[12px] font-bold">Jour</button>
-    <button onclick="setPeriode('semaine')" id="b-semaine" class="flex-1 bg-white/20 text-white py-2 rounded-full text-[12px]">Semaine</button>
-    <button onclick="setPeriode('mois')" id="b-mois" class="flex-1 bg-white/20 text-white py-2 rounded-full text-[12px]">Mois</button>
-    <button onclick="setPeriode('annee')" id="b-annee" class="flex-1 bg-white/20 text-white py-2 rounded-full text-[12px]">Année</button>
-  </div>
-
-  <div class="grid grid-cols-2 gap-3 mb-4">
-    <div class="bg-white rounded-xl p-4"><p class="text-[11px] text-gray-500">CA Total</p><p class="font-black text-[18px]" id="ca">0 F</p></div>
-    <div class="bg-white rounded-xl p-4"><p class="text-[11px] text-gray-500">Inscrits</p><p class="font-black text-[18px]" id="users">0</p></div>
-<div class="bg-[#D4AF37] rounded-xl p-4 text-white"><p class="text-[11px]">NGOs x2000F</p><p class="font-black text-[18px]" id="ngo">0</p></div>
-    <div class="bg-[#0A3A8A] rounded-xl p-4 border border-[#D4AF37]"><p class="text-[11px] text-[#D4AF37]">Coach x1000F</p><p class="font-black text-[18px] text-white" id="coach">0</p></div>
-  </div>
-
-  <div class="bg-white rounded-xl p-4">
-    <h3 class="font-black text-[13px]">Bilan <span id="label">du jour</span></h3>
-    <div class="mt-2 text-[12px] space-y-1">
-      <div class="flex justify-between"><span>Total:</span><b id="total">0 F</b></div>
-      <div class="flex justify-between"><span>Transactions:</span><b id="trans">0</b></div>
-    </div>
-  </div>
-<button onclick="lock()" class="w-full bg-white/20 text-white p-3 rounded-full mt-4 text-[11px]">🔒 Verrouiller</button>
+<div class="p-5">
+<h2 class="font-black text-center">Créer votre compte - Gratuit</h2>
+<input id="nom" placeholder="Nom complet" class="w-full mt-4 p-3.5 rounded-full bg-[#F4F7FF] border">
+<input id="email" type="email" placeholder="georgeskasso3@gmail.com" class="w-full mt-3 p-3.5 rounded-full bg-[#F4F7FF] border">
+<div class="flex mt-3"><span class="bg-[#0A3A8A] text-white px-3 py-3.5 rounded-l-full">+233</span><input id="phone" placeholder="24 123 4567" class="flex-1 p-3.5 rounded-r-full bg-[#F4F7FF] border"></div>
+<div class="relative mt-3"><input id="pass1" type="password" placeholder="Mot de passe" class="w-full p-3.5 rounded-full bg-[#F4F7FF] border pr-12"><span onclick="toggle('pass1')" class="absolute right-4 top-3.5 cursor-pointer">👁️</span></div>
+<div class="relative mt-3"><input id="pass2" type="password" placeholder="Confirmer mot de passe" class="w-full p-3.5 rounded-full bg-[#F4F7FF] border pr-12"><span 
+onclick="toggle('pass2')" class="absolute right-4 top-3.5 cursor-pointer">👁️</span></div>
+<button onclick="alert('Compte créé!')" class="w-full bg-[#0A3A8A] text-white p-4 rounded-full font-black mt-6">S'INSCRIRE GRATUITEMENT</button>
 </div>
-
 </div>
 <script>
-document.getElementById('date').innerText=new Date().toLocaleString('fr-FR');
-function unlock(){
-  if(document.getElementById('code').value==='2026'){
-    document.getElementById('lock').classList.add('hidden');
-    document.getElementById('dash').classList.remove('hidden');
-    calcul();
-  }
-else{document.getElementById('err').innerText='Code faux! Essaie 2026';}
-}
-function lock(){
-  document.getElementById('dash').classList.add('hidden');
-  document.getElementById('lock').classList.remove('hidden');
-  document.getElementById('code').value='';
-}
-let periode='jour';
-function setPeriode(p){
-  periode=p;
-  ['jour','semaine','mois','annee'].forEach(k=>{
-    document.getElementById('b-'+k).className=k===p?'flex-1 bg-[#D4AF37] text-white py-2 rounded-full text-[12px] font-bold':'flex-1 bg-white/20 text-white py-2 rounded-full text-[12px]'
-  });
-  document.getElementById('label').innerText={jour:'du jour',semaine:'de la semaine',mois:'du mois',annee:"de l'année"}[p];
-  calcul();
-}
-function calcul(){
-  let mult=periode==='jour'?1:periode==='semaine'?7:periode==='mois'?30:365;
-  let ngo=Math.floor(Math.random()*3+1)*mult;
-  let coach=Math.floor(Math.random()*4+1)*mult;
-  let ca=ngo*2000+coach*1000;
-  document.getElementById('ca').innerText=ca.toLocaleString()+' F';
-  document.getElementById('users').innerText=(12*mult);
-  document.getElementById('ngo').innerText=ngo;
-  document.getElementById('coach').innerText=coach;
-  document.getElementById('total').innerText=ca.toLocaleString()+' F';
-  document.getElementById('trans').innerText=ngo+coach;
-}
+function toggle(id){const i=document.getElementById(id);i.type=i.type==='password'?'text':'password';}
 </script>
 </body>
 </html>
+
+
+  
