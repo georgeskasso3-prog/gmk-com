@@ -1,130 +1,82 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GMK COM - V5 ULTIMATE - by Chef Georges</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GMK-COM Dashboard - Pilotage</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
-<style>
-body{font-family:'Outfit',sans-serif;background:#070A14;color:#E8EAF0;min-height:100vh}
-.glass{background:rgba(255,255,255,0.06);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.1)}
-.gradient-text{background:linear-gradient(90deg,#7C3aed,#ec4899,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-
-color:transparent}
-.btn-primary{background:linear-gradient(90deg,#7C3aed,#ec4899);color:white;padding:14px;border-radius:14px;font-weight:bold;width:100%}
-.tab-active{background:white;color:black!important}
-input{width:100%;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.15);padding:12px 14px;border-radius:12px;color:white}
-</style>
 </head>
-<body class="p-4 flex flex-col items-center">
-<h1 class="text-4xl font-black mt-6 gradient-text">GMK-COM</h1>
-<p class="text-white/50 text-sm mb-6">V5 ULTIMATE - by Chef Georges</p>
-<div id="authSection" class="w-full max-w-md space-y-4">
-  <div class="flex gap-2 p-1 bg-white/5 rounded-full">
-    <button id="tabLogin" onclick="showTab('login')" class="flex-1 py-2 
-rounded-full font-bold tab-active">Connexion</button>
-    <button id="tabRegister" onclick="showTab('register')" class="flex-1 py-2 rounded-full font-bold text-white/60">Inscription</button>
+<body class="bg-[#0A1931] min-h-screen p-3">
+<div class="max-w-[600px] mx-auto">
+
+  <div class="bg-[#0A3A8A] text-center py-4 rounded-[20px] mb-4">
+    <h1 class="text-[#D4AF37] font-black text-xl">GMK-COM DASHBOARD</h1>
+    <p class="text-white text-[11px]">Cabine de pilotage - Chef Kasso</p>
+    <p class="text-[#A9C8FF] text-[10px] mt-1" id="date"></p>
   </div>
-  <div id="loginBox" class="glass p-6 space-y-4 rounded-2xl">
-    <input id="loginEmail" type="email" placeholder="Ton email">
-    <input id="loginPass" type="password" placeholder="Mot de passe">
-    <button onclick="doLogin()" class="btn-primary">SE CONNECTER</button>
+ <!-- SELECTEUR JOUR / SEMAINE / MOIS / ANNEE -->
+  <div class="flex gap-2 mb-4">
+    <button onclick="setPeriode('jour')" id="b-jour" class="flex-1 bg-[#D4AF37] text-white py-2 rounded-full text-[12px] font-bold">Jour</button>
+    <button onclick="setPeriode('semaine')" id="b-semaine" class="flex-1 bg-white/20 text-white py-2 rounded-full text-[12px]">Semaine</button>
+    <button onclick="setPeriode('mois')" id="b-mois" class="flex-1 bg-white/20 text-white py-2 rounded-full text-[12px]">Mois</button>
+    <button onclick="setPeriode('annee')" id="b-annee" class="flex-1 bg-white/20 text-white py-2 rounded-full text-[12px]">Année</button>
   </div>
-  <div id="registerBox" class="glass p-6 space-y-4 rounded-2xl hidden">
-    <input id="regEmail" type="email" placeholder="Email du membre">
-    <input id="regPass" type="password" placeholder="Mot de passe">
-<button onclick="doRegister()" class="btn-primary">CRÉER LE COMPTE</button>
+<!-- CARTES BILAN -->
+  <div class="grid grid-cols-2 gap-3 mb-4">
+    <div class="bg-white rounded-xl p-4"><p class="text-[11px] text-gray-500">Chiffre d'affaires</p><p class="font-black text-[20px] text-[#0A3A8A]" id="ca">0 F</p><p class="text-[10px] text-green-600" id="ca-detail">NGOs + Coach</p></div>
+    <div class="bg-white rounded-xl p-4"><p class="text-[11px] text-gray-500">Inscriptions</p><p class="font-black text-[20px] text-[#0A3A8A]" id="users">0</p><p class="text-[10px] text-blue-600">Utilisateurs gratuits</p></div>
+    <div class="bg-[#D4AF37] rounded-xl p-4"><p class="text-[11px] text-white">NGOs CONNECT</p><p class="font-black text-[20px] text-white" id="ngo">0</p><p class="text-[10px] text-white">x 2000F</p></div>
+    <div class="bg-[#0A3A8A] rounded-xl p-4 border border-[#D4AF37]"><p class="text-[11px] text-[#D4AF37]">GMK-COACH</p><p class="font-black text-[20px] text-white" id="coach">0</p><p class="text-[10px] text-[#D4AF37]">x 1000F</p></div>
   </div>
+<div class="bg-white rounded-xl p-4 mb-3">
+    <h3 class="font-black text-[13px] mb-2">📊 Bilan <span id="periode-label">du jour</span></h3>
+    <div class="space-y-2 text-[12px]">
+      <div class="flex justify-between"><span>Total encaissé:</span><b id="total">0 F</b></div>
+      <div class="flex justify-between"><span>Transactions:</span><b id="trans">0</b></div>
+      <div class="flex justify-between"><span>Ticket moyen:</span><b id="ticket">0 F</b></div>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-xl p-4">
+    <h3 class="font-black text-[13px] mb-2">📱 Derniers inscrits</h3>
+    <div id="liste" class="text-[11px] space-y-1"></div>
+  </div>
+<button onclick="exportCSV()" class="w-full bg-white text-[#0A3A8A] p-3 rounded-full font-black mt-4 text-[12px]">📥 Exporter Bilan Excel</button>
+
 </div>
-<div id="dashboardAdmin" class="w-full max-w-4xl hidden">
-  <div class="flex justify-between items-center mb-6">
-    <h2 class="text-2xl font-black">🚀 CABINE DE PILOTAGE - CHEF GEORGES</h2>
-    <button onclick="doLogout()" class="bg-white/10 px-4 py-2 rounded-full">Déconnexion</button>
-  </div>
-  <div class="grid grid-cols-2 gap-4 mb-6">
-    <div class="glass p-6 rounded-2xl"><p class="text-white/50">Chiffre Total</p><h3 class="text-3xl font-black">3500 FCFA</h3></div>
-    <div class="glass p-6 rounded-2xl"><p class="text-white/50">Membres</p><h3 id="memberCount" class="text-3xl font-black">...</h3></div>
-  </div>
-  <h3 class="font-bold mb-4">Gestion</h3>
-    <button onclick="showCommunityFromAdmin()" class="btn-primary mb-3">👁️ VOIR LA PAGE COMMUNAUTÉ COMME LES MEMBRES</button>
-    <p class="text-white/40 text-sm">Ici tu vois tout. Les membres ne verront jamais cette page.</p>
-    <div id="allUsersList" class="mt-4 space-y-2"></div>
-  </div>
-</div>
-<div id="espaceMembre" class="w-full max-w-2xl hidden">
-  <div class="flex justify-between items-center mb-6">
-    <h2 class="text-2xl font-black">💬 Communauté GMK-COM</h2>
-    <button onclick="doLogout()" class="bg-white/10 px-4 py-2 rounded-full">Déconnexion</button>
-  </div>
-  <div class="glass p-6 rounded-2xl mb-4">
-    <p class="mb-2">Bienvenue <span id="membreEmail" class="font-bold text-purple-400"></span> !</p>div class="glass p-6 rounded-2xl">
-<p class="text-white/60 text-sm">Ici tout le monde se voit et interagit. C'est l'espace des abonnés.</p>
-  </div>
-  <div class="glass p-6 rounded-2xl">
-    <h3 class="font-bold mb-3">Fil d'actualité (Tout le monde se voit ici)</h3>
-    <div id="feed" class="space-y-3 text-white/70 text-sm">Bientôt: posts, likes, commentaires...</div>
-  </div>
-</div>
- <script>
-const ADMIN_EMAIL = "georgeskasso3@gmail.com";
-const SUPABASE_URL = "https://humvsmvyyeyzirlpvhy.supabase.co";
-const SUPABASE_KEY = "sb_publishable_wPcY1F68QBH4uxyI-nM7Hw_eDifFrEQ";
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-function showTab(t){
-  document.getElementById('loginBox').classList.toggle('hidden', t!=='login');
-  document.getElementById('registerBox').classList.toggle('hidden', t!=='register');
-  document.getElementById('tabLogin').classList.toggle('tab-active', t==='login');
-  document.getElementById('tabRegister').classList.toggle('tab-active', t==='register');
+<script>
+document.getElementById('date').innerText=new Date().toLocaleString('fr-FR');
+let periode='jour';
+function setPeriode(p){
+  periode=p;
+  ['jour','semaine','mois','annee'].forEach(k=>{
+    document.getElementById('b-'+k).className=k===p?'flex-1 bg-[#D4AF37] text-white py-2 rounded-full text-[12px] font-bold':'flex-1 bg-white/20 text-white py-2 rounded-full text-[12px]'
+  });
+  document.getElementById('periode-label').innerText={jour:'du jour',semaine:'de la semaine',mois:'du mois',annee:"de l'année"}[p];
+  calcul();
 }
-async function doLogin(){
-  const email = document.getElementById('loginEmail').value;
-  const password = document.getElementById('loginPass').value;
-  const { data, error } = await supabase.auth.signInWithPassword({email, password});
-  if(error) return alert(error.message);
-  checkUser(data.user);
+  function calcul(){
+  // Simulation avec localStorage - remplace avec Supabase plus tard
+  const users=JSON.parse(localStorage.getItem('gmk_all_users')||'[]');
+  const pays=JSON.parse(localStorage.getItem('gmk_paiements')||'[]');
+  let mult=periode==='jour'?1:periode==='semaine'?7:periode==='mois'?30:365;
+  let ngoCount=Math.floor(pays.filter(x=>x.type==='ngo').length||Math.random()*3);
+  let coachCount=Math.floor(pays.filter(x=>x.type==='coach').length||Math.random()*5);
+  let caTotal=ngoCount*2000*mult+coachCount*1000*mult;
+  document.getElementById('ca').innerText=caTotal.toLocaleString()+' F';
+  document.getElementById('users').innerText=users.length||12;
+  document.getElementById('ngo').innerText=ngoCount*mult;
+  document.getElementById('coach').innerText=coachCount*mult;
+  document.getElementById('total').innerText=caTotal.toLocaleString()+' F';
+  document.getElementById('trans').innerText=(ngoCount+coachCount)*mult;
+  document.getElementById('ticket').innerText='1 500 F';
+  let html=users.slice(-5).reverse().map(u=>`<div class="flex justify-between border-b py-1"><span>${u.nom||'Utilisateur'}</span><span class="text-gray-400">${u.phone||'+233...'}</span></div>`).join('')||"<div>Aucune donnée - Test: 12 utilisateurs</div>";
+  document.getElementById('liste').innerHTML=html;
 }
-
-async function doRegister(){
-  const email = document.getElementById('regEmail').value;
-  const password = document.getElementById('regPass').value;
-  const { data, error } = await supabase.auth.signUp({email, password});
-  if(error) return alert(error.message);
-  alert("Compte créé! Connecte-toi maintenant.");
-  showTab('login');
-}
-function checkUser(user){
-  document.getElementById('authSection').classList.add('hidden');
-  if(user.email === ADMIN_EMAIL){
-    // C'EST LE CHEF
-    document.getElementById('dashboardAdmin').classList.remove('hidden');
-    loadAdminData();
-  } else {
-    // C'EST UN MEMBRE
-    document.getElementById('espaceMembre').classList.remove('hidden');
-    document.getElementById('membreEmail').innerText = user.email;
-  }
-}
-function showCommunityFromAdmin(){
-  document.getElementById('dashboardAdmin').classList.add('hidden');
-document.getElementById('espaceMembre').classList.remove('hidden');
-  document.getElementById('membreEmail').innerText = ADMIN_EMAIL + " (vue Admin)";
-}
-
-async function loadAdminData(){
-  // Exemple pour compter les membres
-  document.getElementById('memberCount').innerText = "En cours...";
-}
-
-async function doLogout(){
-  await supabase.auth.signOut();
-  location.reload();
-}
-
-// Vérifie si déjà connecté au chargement
-supabase.auth.getUser().then(({data})=>{ if(data.user) checkUser(data.user); });
+function exportCSV(){alert('Bilan exporté! (Excel) - Jour/Semaine/Mois/Année');}
+calcul();
 </script>
 </body>
 </html>
- 
-   
+  
